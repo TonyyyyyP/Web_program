@@ -1,0 +1,21 @@
+{
+  "name": "final_project_web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.1",
+    "express-handlebars": "^8.0.1",
+    "express-handlebars-sections": "^1.0.1",
+    "handlebars": "^4.7.8",
+    "nodejs": "^0.0.0",
+    "numeral": "^2.0.6"
+  }
+}
