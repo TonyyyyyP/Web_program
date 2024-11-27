@@ -25,9 +25,10 @@ app.engine(
 app.set("view engine", "hbs");
 app.set("views", "./views");
 
+app.use(express.static('static'));
 // Cấu hình route chính
 app.get("/", (req, res) => {
-  res.render("index", {
+  res.render("Home", {
     title: "THE SAIGON TIMES",
   });
 });
