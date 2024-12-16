@@ -1,0 +1,120 @@
+<!-- UserAddArticlePage -->
+<div class="container-fluid pt-5">
+  <div class="container">
+    <div class="row">
+      <!-- SideBar -->
+      <div class="col-12 col-sm-12 col-md-3 col-lg-3 sideBar">
+        <div>
+          <div class="heading">Quản lý tài khoản</div>
+          <div class="py-2 pl-2">
+            <div class="cursor-pointer">Thông tin</div>
+          </div>
+        </div>
+        <div>
+          <div class="heading">Quản lý bài viết</div>
+          <div class="py-2 pl-2">
+            <div class="pb-2 cursor-pointer select">Thêm bài viết</div>
+            <div class="cursor-pointer">Bài viết của bạn</div>
+          </div>
+        </div>
+      </div>
+      <!-- Add Article Section -->
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9 article">
+        <form action="" method="post" enctype="multipart/form-data">
+          <!-- Article Image -->
+          <div class="form-group mb-3">
+            <label
+              for="articleImage"
+              class="form-label font-weight-bold text-black"
+              >Ảnh bài viết</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="articleImage"
+              name="articleImage"
+              accept="image/*"
+            />
+          </div>
+
+          <!-- Article Title -->
+          <div class="form-group mb-3">
+            <label
+              for="articleTitle"
+              class="form-label font-weight-bold text-black"
+              >Tiêu đề bài viết</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="articleTitle"
+              name="articleTitle"
+              placeholder="Nhập tiêu đề bài viết"
+              required
+            />
+          </div>
+
+          <!-- Cateogry -->
+          <div class="form-group mb-3">
+            <label for="category" class="form-label font-weight-bold text-black"
+              >Tiêu đề bài viết</label
+            >
+            <select
+              class="form-select category-select"
+              aria-label="Default select example"
+            >
+              <option selected>Chọn danh mục của bài viết</option>
+              <option value="1">Kinh doanh</option>
+              <option value="2">Chính trị</option>
+              <option value="3">Văn hóa</option>
+            </select>
+          </div>
+
+          <!-- tags -->
+          <div class="form-group mb-3">
+            <div class="d-flex justify-content-between">
+              <label for="" class="form-label font-weight-bold text-black"
+                >Tags</label
+              >
+              <button type="" class="btn btn-primary font-weight-bold px-4">
+                Thêm tags
+              </button>
+            </div>
+            <div>
+              <div class="addedTag">
+                Kinh tế
+                <span class="close-btn">&times;</span>
+              </div>
+              <div class="addedTag">
+                Chính trị
+                <span class="close-btn">&times;</span>
+              </div>
+              <div class="addedTag">
+                Văn Hóa
+                <span class="close-btn">&times;</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Article Content -->
+          <div class="form-group mb-4">
+            <label for="articleContent" class="form-label font-weight-bold"
+              >Nội dung bài viết</label
+            >
+            <div
+              id="articleContent"
+              style="height: 400px; background: #fff"
+            ></div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary font-weight-bold px-4">
+              Đăng bài viết
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
