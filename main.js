@@ -1,163 +1,238 @@
-(function ($) {
-    "use strict";
-    
-    // Dropdown on mouse hover
-    $(document).ready(function () {
-        function toggleNavbarMethod() {
-            if ($(window).width() > 992) {
-                $('.navbar .dropdown').on('mouseover', function () {
-                    $('.dropdown-toggle', this).trigger('click');
-                }).on('mouseout', function () {
-                    $('.dropdown-toggle', this).trigger('click').blur();
-                });
-            } else {
-                $('.navbar .dropdown').off('mouseover').off('mouseout');
-            }
+import express from "express";
+import { engine } from "express-handlebars";
+import numeral from "numeral";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import session from "express-session";
+import hbs_section from "express-handlebars-sections";
+
+// Import custom services and routes
+import categoryRouter from "./old_folder/old_routes/category.route.js";
+import productRouter from "./old_folder/old_routes/product.route.js";
+import productUserRouter from "./old_folder/old_routes/product-user.route.js";
+import accountRouter from "./old_folder/old_routes/account.route.js";
+import ArticleService from "./services/article.service.js";
+import CategoryService from "./services/category.service.js";
+import TagService from "./services/tag.service.js";
+import { isAuth, isAdmin } from "./middlewares/auth.mdw.js";
+
+const app = express();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+// Session configuration
+app.set("trust proxy", 1);
+app.use(
+  session({
+    secret: "SECRET_KEY",
+    resave: false,
+    saveUninitialized: true,
+    cookie: {},
+  })
+);
+
+// Middleware for parsing form data
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
+
+// Serve static files
+app.use("/static", express.static("static"));
+
+// Configure Handlebars as the view engine
+app.engine(
+  "hbs",
+  engine({
+    extname: "hbs",
+    helpers: {
+      format_number(value) {
+        return numeral(value).format("0,0") + " vnd";
+      },
+      fillHtmlContent: hbs_section(),
+      formatDate(date) {
+        if (!date) return "";
+        const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+        return new Date(date).toLocaleDateString("en-GB", options);
+      },
+
+      // Bổ sung các helper của bạn tại đây:
+      eq(a, b) {
+        return a === b;
+      },
+      gt(a, b) {
+        return a > b;
+      },
+      lt(a, b) {
+        return a < b;
+      },
+      add(a, b) {
+        return a + b;
+      },
+      subtract(a, b) {
+        return a - b;
+      },
+      range(start, end) {
+        const range = [];
+        for (let i = start; i <= end; i++) {
+          range.push(i);
         }
-        toggleNavbarMethod();
-        $(window).resize(toggleNavbarMethod);
+        return range;
+      },
+    },
+  })
+);
+
+app.set("view engine", "hbs");
+app.set("views", "./views");
+
+// Middleware to load categories into res.locals
+app.use(async (req, res, next) => {
+  try {
+    const categories = await CategoryService.getAllCategories();
+    const topThreeArticlesForLeftHeader =
+      await ArticleService.getTopThreeArticlesForLeftHeader();
+    res.locals.lcCategories = categories;
+    res.locals.topThreeArticlesForLeftHeader = topThreeArticlesForLeftHeader;
+  } catch (error) {
+    console.error("Error loading categories:", error);
+    res.locals.lcCategories = [];
+  }
+  next();
+});
+
+// Middleware to handle session data for authentication
+app.use((req, res, next) => {
+  req.session.auth = req.session.auth ?? false;
+  res.locals.auth = req.session.auth;
+  res.locals.authUser = req.session.authUser;
+  next();
+});
+
+// Define routes
+// Home route
+app.get("/", async (req, res) => {
+  try {
+    const topArticles = await ArticleService.getTopArticles();
+    const topThreeArticlesForLeftHeader =
+      await ArticleService.getTopThreeArticlesForLeftHeader();
+    const topFourArticlesForRightHeader =
+      await ArticleService.getTopFourArticlesForRightHeader();
+    const topTwoArticlesForBreakingNews =
+      await ArticleService.getTopTwoArticlesForBreakingNews();
+    const newestArticlesForHomePage =
+      await ArticleService.getNewestArticlesForHomePage();
+    const topArticleInCategory = await ArticleService.getTopArticleInCategory();
+    const categories = await CategoryService.getAllCategories();
+
+    const section1Articles = newestArticlesForHomePage.slice(0, 4);
+    const section2Articles = newestArticlesForHomePage.slice(4, 8);
+    const section3Articles = newestArticlesForHomePage.slice(8, 9);
+    const section4Articles = newestArticlesForHomePage.slice(9, 13);
+
+    res.render("homePage/homePage", {
+      topArticles,
+      topThreeArticlesForLeftHeader,
+      topFourArticlesForRightHeader,
+      topTwoArticlesForBreakingNews,
+      topArticleInCategory,
+      section1Articles,
+      section2Articles,
+      section3Articles,
+      section4Articles,
+      categories,
     });
-    
-    
-    // Back to top button
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 100) {
-            $('.back-to-top').fadeIn('slow');
-        } else {
-            $('.back-to-top').fadeOut('slow');
-        }
-    });
-    $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
-        return false;
-    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
 
+app.get("/lienlac", (req, res) => {
+  res.render("homePage/contact");
+});
 
-    // Main News carousel
-    $(".main-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1500,
-        items: 1,
-        dots: true,
-        loop: true,
-        center: true,
-    });
+app.get("/danhmuc", (req, res) => {
+  res.render("homePage/category");
+});
 
+// Article route
+app.get("/baibao", (req, res) => {
+  res.render("articlePage/articlePage");
+});
 
-    // Tranding carousel
-    $(".tranding-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 2000,
-        items: 1,
-        dots: false,
-        loop: true,
-        nav : true,
-        navText : [
-            '<i class="fa fa-angle-left"></i>',
-            '<i class="fa fa-angle-right"></i>'
-        ]
-    });
+// AdminPage route
+app.get("/quantrivien/quanlybaibao", async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = 10;
 
+  const { articles, total } = await ArticleService.getArticlesWithStatus(
+    page,
+    pageSize
+  );
 
-    // Carousel item 1
-    $(".carousel-item-1").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1500,
-        items: 1,
-        dots: false,
-        loop: true,
-        nav : true,
-        navText : [
-            '<i class="fa fa-angle-left" aria-hidden="true"></i>',
-            '<i class="fa fa-angle-right" aria-hidden="true"></i>'
-        ]
+  const categories = await CategoryService.getAllCategories();
+  const tags = await TagService.getAllTags();
+
+  res.render("adminPage/AdminArticleManagement", {
+    articles,
+    currentPage: page,
+    totalPages: Math.ceil(total / pageSize),
+    categories,
+    tags,
+  });
+});
+
+app.post("/addArticle", async (req, res) => {
+  console.log("Request Body:", req.body);
+  console.log("Uploaded File:", req.file);
+  try {
+    const { title, content, category_id, tagIds } = req.body;
+    const newArticle = await ArticleService.addArticle({
+      title,
+      content,
+      category_id,
+      tagIds,
     });
 
-    // Carousel item 2
-    $(".carousel-item-2").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1000,
-        margin: 30,
-        dots: false,
-        loop: true,
-        nav : true,
-        navText : [
-            '<i class="fa fa-angle-left" aria-hidden="true"></i>',
-            '<i class="fa fa-angle-right" aria-hidden="true"></i>'
-        ],
-        responsive: {
-            0:{
-                items:1
-            },
-            576:{
-                items:1
-            },
-            768:{
-                items:2
-            }
-        }
-    });
+    res.redirect("/quantrivien/quanlybaibao");
+  } catch (error) {
+    console.error("Error creating article:", error);
+    res.status(500).send("Error creating article");
+  }
+});
 
+app.get("/quantrivien/quanlydanhmuc", (req, res) => {
+  res.render("adminPage/AdminCategoryManagement");
+});
 
-    // Carousel item 3
-    $(".carousel-item-3").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1000,
-        margin: 30,
-        dots: false,
-        loop: true,
-        nav : true,
-        navText : [
-            '<i class="fa fa-angle-left" aria-hidden="true"></i>',
-            '<i class="fa fa-angle-right" aria-hidden="true"></i>'
-        ],
-        responsive: {
-            0:{
-                items:1
-            },
-            576:{
-                items:1
-            },
-            768:{
-                items:2
-            },
-            992:{
-                items:3
-            }
-        }
-    });
-    
+app.get("/quantrivien/quanlytag", (req, res) => {
+  res.render("adminPage/AdminTagManagement");
+});
 
-    // Carousel item 4
-    $(".carousel-item-4").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1000,
-        margin: 30,
-        dots: false,
-        loop: true,
-        nav : true,
-        navText : [
-            '<i class="fa fa-angle-left" aria-hidden="true"></i>',
-            '<i class="fa fa-angle-right" aria-hidden="true"></i>'
-        ],
-        responsive: {
-            0:{
-                items:1
-            },
-            576:{
-                items:1
-            },
-            768:{
-                items:2
-            },
-            992:{
-                items:3
-            },
-            1200:{
-                items:4
-            }
-        }
-    });
-    
-})(jQuery);
+app.get("/quantrivien/quanlynguoidung", (req, res) => {
+  res.render("adminPage/AdminUserManagement");
+});
 
+// UserPage route
+app.get("/nguoidung/thembaiviet", (req, res) => {
+  res.render("userPage/UserAddArticlePage");
+});
+
+app.get("/nguoidung/danhsachbaiviet", (req, res) => {
+  res.render("userPage/UserArticleListePage");
+});
+
+app.get("/nguoidung/thongtin", (req, res) => {
+  res.render("userPage/UserProfilePage");
+});
+
+app.use("/admin/categories", isAuth, isAdmin, categoryRouter);
+app.use("/admin/products", isAuth, isAdmin, productRouter);
+app.use("/products", productUserRouter);
+app.use("/account", accountRouter);
+
+// Start server
+app.listen(3000, () => {
+  console.log("Server started on http://localhost:3000");
+});
