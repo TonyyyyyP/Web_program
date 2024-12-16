@@ -1,0 +1,301 @@
+<!-- ArticleManagement -->
+<div class="container-fluid pt-5">
+  <div class="container">
+    <div class="row">
+      <!-- SideBar -->
+      <div class="col-12 col-sm-12 col-md-3 col-lg-3 sideBar">
+        <div>
+          <div class="heading">Quản lý website</div>
+          <div class="py-2 pl-2">
+            <div class="pb-2 cursor-pointer">Quản lý danh mục</div>
+            <div class="pb-2 cursor-pointer">Quản lý tag</div>
+            <div class="pb-2 cursor-pointer select">Quản lý bài viết</div>
+          </div>
+        </div>
+        <div>
+          <div class="heading">Quản lý người dùng</div>
+          <div class="py-2 pl-2">
+            <div class="pb-2 cursor-pointer">Người dùng</div>
+          </div>
+        </div>
+      </div>
+      <!-- Add categiry managemet Section -->
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9">
+        <div>
+          <div class="text-black mb-3">Tìm kiếm bài viết:</div>
+          <div class="input-group" style="width: 100%; max-width: 300px">
+            <input
+              type="text"
+              class="form-control border-0"
+              placeholder="Từ khóa"
+            />
+            <div class="input-group-append">
+              <button
+                class="input-group-text bg-primary text-dark border-0 px-3"
+              >
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="mt-4 mb-3 d-flex justify-content-end">
+          <button class="btn btn-primary font-weight-bold px-3" data-bs-toggle="modal"
+    data-bs-target="#addArticleModal">
+            Thêm bài viết
+          </button>
+        </div>
+        <table class="table-custom">
+    <thead>
+        <tr>
+            <th class="text-black">ID</th>
+            <th class="text-black">Ảnh</th>
+            <th class="text-black">Tiêu đề</th>
+            <th class="text-black">Ngày đăng</th>
+            <th class="text-black">Danh mục</th>
+            <th class="text-black">Trạng thái</th>
+            <th class="text-black">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each articles}}
+        <tr>
+            <td>{{this.articleId}}</td>
+            <td>
+                <img src="data:image/jpeg;base64,{{this.img}}" alt="Article Image" style="width: 100px; height: auto;" />
+            </td>
+            <td>{{this.title}}</td>
+            <td>{{formatDate this.publishedDay}}</td>
+            <td>{{this.categoryName}}</td>
+            <td>
+                <span class="status-badge 
+                    {{#if (eq this.status 'Từ chối')}}status-rejected{{/if}}
+                    {{#if (eq this.status 'Đang duyệt')}}status-pending{{/if}}
+                    {{#if (eq this.status 'Đã duyệt')}}status-approved{{/if}}
+                ">
+                    {{this.status}}
+                </span>
+            </td>
+            <td class="action-buttons">
+                <button class="btn btn-sm btn-primary">Xem</button>
+                <button class="btn btn-sm btn-secondary">Chỉnh sửa</button>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+      <!-- Pagination -->
+      <div class="mt-5 d-flex justify-content-center align-items-center">
+      <nav class="">
+          <ul class="pagination">
+              {{#if (gt currentPage 1)}}
+              <li class="page-item">
+                  <a class="page-link" href="?page={{subtract currentPage 1}}">Trước</a>
+              </li>
+              {{/if}}
+              {{#each (range 1 totalPages)}}
+              <li class="page-item {{#if (eq this ../currentPage)}}active{{/if}}">
+                  <a class="page-link" href="?page={{this}}">{{this}}</a>
+              </li>
+              {{/each}}
+              {{#if (lt currentPage totalPages)}}
+              <li class="page-item">
+                  <a class="page-link" href="?page={{add currentPage 1}}">Tiếp</a>
+              </li>
+              {{/if}}
+          </ul>
+      </nav>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Article Modal -->
+<div
+  class="modal fade"
+  id="addArticleModal"
+  tabindex="-1"
+  aria-labelledby="addArticleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addArticleModalLabel">Thêm bài viết</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form action="" method="post" enctype="multipart/form-data">
+          <!-- Article Image -->
+          <div class="form-group mb-3">
+            <label
+              for="articleImage"
+              class="form-label font-weight-bold text-black"
+              >Ảnh bài viết</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="articleImage"
+              name="articleImage"
+              accept="image/*"
+            />
+          </div>
+
+          <!-- Article Title -->
+          <div class="form-group mb-3">
+            <label
+              for="articleTitle"
+              class="form-label font-weight-bold text-black"
+              >Tiêu đề bài viết</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="articleTitle"
+              name="articleTitle"
+              placeholder="Nhập tiêu đề bài viết"
+              required
+            />
+          </div>
+
+          <!-- Category -->
+          <div class="form-group mb-3">
+            <label
+              for="category"
+              class="form-label font-weight-bold text-black"
+              >Danh mục</label
+            >
+            <select
+  class="form-select category-select"
+  id="category_id"
+  name="category_id"
+  aria-label="Default select example"
+  required
+>
+  <option selected disabled>Chọn danh mục của bài viết</option>
+  {{#each categories}}
+  <option value="{{this.id}}">{{this.Name}}</option>
+  {{/each}}
+</select>
+
+          </div>
+
+          <!-- Tags -->
+          <div class="form-group mb-3">
+  <div class="d-flex justify-content-between">
+    <label for="tags" class="form-label font-weight-bold text-black">Tags</label>
+    <select id="tagSelect" class="form-select" aria-label="Chọn tag">
+      <option selected disabled>Chọn một tag</option>
+      {{#each tags}}
+      <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div id="selectedTags" class="mt-2"></div>
+</div>
+
+          <!-- Article Content -->
+          <div class="form-group mb-4">
+            <label for="articleContent" class="form-label font-weight-bold"
+              >Nội dung bài viết</label
+            >
+            <div
+              id="articleContent"
+              style="height: 400px; background: #fff"
+            ></div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary font-weight-bold px-4">
+              Đăng bài viết
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Xử lý khi chọn tag từ dropdown
+  document.getElementById('tagSelect').addEventListener('change', function () {
+    const selectedTagId = this.value;
+    const selectedTagName = this.options[this.selectedIndex].text;
+
+    // Kiểm tra nếu tag đã tồn tại
+    const existingTag = document.querySelector(`#selectedTags .addedTag[data-id="${selectedTagId}"]`);
+    if (existingTag) {
+      alert('Tag này đã được thêm!');
+      return;
+    }
+
+    // Tạo tag mới
+    const tagDiv = document.createElement('div');
+    tagDiv.className = 'addedTag';
+    tagDiv.setAttribute('data-id', selectedTagId);
+    tagDiv.innerHTML = `
+      ${selectedTagName}
+      <span class="close-btn">&times;</span>
+    `;
+
+    // Thêm tag vào danh sách
+    document.getElementById('selectedTags').appendChild(tagDiv);
+
+    // Xử lý khi nhấn nút xóa tag
+    tagDiv.querySelector('.close-btn').addEventListener('click', function () {
+      tagDiv.remove();
+    });
+
+    // Reset dropdown về trạng thái mặc định
+    this.value = '';
+  });
+
+  // Xử lý khi submit form
+  document.querySelector('form').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    // Thu thập dữ liệu từ form
+    const title = document.getElementById('articleTitle').value;
+    const description = document.getElementById('articleContent').innerHTML;
+    const categoryId = document.getElementById('category_id').value;
+
+    // Thu thập danh sách các tag đã chọn
+    const tagIds = [];
+    document.querySelectorAll('#selectedTags .addedTag').forEach(function (tagDiv) {
+      tagIds.push(tagDiv.getAttribute('data-id'));
+    });
+
+    // Thu thập hình ảnh
+    const articleImage = document.getElementById('articleImage').files[0];
+    const formData = new FormData();
+    formData.append('Title', title);
+    formData.append('Description', description);
+    formData.append('category_id', categoryId);
+    formData.append('TagIDs', JSON.stringify(tagIds));
+
+    if (articleImage) {
+      formData.append('ArticleImage', articleImage);
+    }
+
+    // Gửi dữ liệu qua fetch (AJAX)
+    fetch('/addArticle', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then(data => {
+        alert(data.message);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  });
+</script>
