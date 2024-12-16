@@ -1,0 +1,710 @@
+<div>
+  <!-- Main News Slider Start -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-7 px-0">
+        <div
+          data-aos="fade-right"
+          class="owl-carousel main-carousel position-relative"
+        >
+          {{#each topThreeArticlesForLeftHeader}}
+            <div
+              class="position-relative overflow-hidden"
+              style="height: 500px"
+            >
+              <img
+                class="img-fluid h-100"
+                src="data:image/jpeg;base64,{{img}}"
+                style="object-fit: cover"
+              />
+              <div class="overlay">
+                <div class="mb-2">
+                  <a
+                    class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                    href=""
+                  > {{category_name}}</a>
+                  <a class="text-white" href="">{{formatDate publishedDay}}</a>
+                </div>
+                <a
+                  class="h2 m-0 text-white text-uppercase font-weight-bold"
+                  href="/baibao/{{id}}"
+                >{{title}}</a>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      <div class="col-lg-5 px-0">
+        <div class="row mx-0">
+          {{#each topFourArticlesForRightHeader}}
+            <div
+              data-aos="fade-up"
+              data-aos-delay="{{@index}}50"
+              class="col-md-6 px-0"
+            >
+              <div
+                class="position-relative overflow-hidden"
+                style="height: 250px"
+              >
+                <img
+                  class="img-fluid w-100 h-100"
+                  src="data:image/jpeg;base64,{{img}}"
+                  style="object-fit: cover"
+                />
+                <div class="overlay">
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                      href=""
+                    >{{category_name}}</a>
+                    <a class="text-white" href=""><small>{{formatDate
+                          publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-white text-uppercase font-weight-semi-bold"
+                    href="/baibao/{{id}}"
+                  >{{title}}</a>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Main News Slider End -->
+
+  <!-- Breaking News Start -->
+  <div class="container-fluid bg-dark py-3 mb-3">
+    <div class="container">
+      <div class="row align-items-center bg-dark">
+        <div class="col-12">
+          <div data-aos="fade-up" class="d-flex justify-content-between">
+            <div
+              class="bg-primary text-dark text-center font-weight-medium py-2"
+              style="width: 170px"
+            >
+              Tin mới nhất
+            </div>
+            <div
+              class="owl-carousel tranding-carousel position-relative d-inline-flex align-items-center ml-3"
+              style="width: calc(100% - 170px); padding-right: 90px"
+            >
+              {{#each topArticles}}
+                <div class="text-truncate">
+                  <a
+                    class="text-white text-uppercase font-weight-semi-bold"
+                    href="/baibao/{{id}}"
+                  >{{title}}</a>
+                </div>
+              {{/each}}
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Breaking News End -->
+
+  <!-- Featured News Slider Start -->
+  <div class="container-fluid pt-5 mb-3">
+    <div class="container">
+      <div class="section-title">
+        <h4 class="m-0 text-uppercase font-weight-bold">Tin nổi bật</h4>
+      </div>
+      <div class="owl-carousel news-carousel carousel-item-4 position-relative">
+        {{#each topArticles}}
+          <div
+            data-aos="fade-up"
+            data-aos-delay="{{@index}}50"
+            class="position-relative overflow-hidden"
+            style="height: 300px"
+          >
+            <img
+              class="img-fluid h-100"
+              src="data:image/jpeg;base64,{{img}}"
+              style="object-fit: cover"
+            />
+            <div class="overlay">
+              <div class="mb-2">
+                <a
+                  class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                  href="#"
+                >
+                  {{category_name}}
+                </a>
+                <a class="text-white" href="#">
+                  <small>{{formatDate publishedDay}}</small>
+                </a>
+              </div>
+              <a
+                class="h6 m-0 text-white text-uppercase font-weight-semi-bold"
+                href="/baibao/{{id}}"
+              >
+                {{title}}
+              </a>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </div>
+  <!-- Featured News Slider End -->
+
+  <!-- News With Sidebar Start -->
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="row">
+            <!-- Tin mới nhất -->
+            <!-- Heading -->
+            <div class="col-12">
+              <div class="section-title">
+                <h4 class="m-0 text-uppercase font-weight-bold">
+                  Tin mới nhất
+                </h4>
+                <a
+                  class="text-secondary font-weight-medium text-decoration-none"
+                  href=""
+                >Xem tất cả</a>
+              </div>
+            </div>
+            <!-- 4 big article section -->
+            {{#each section1Articles}}
+              <div
+                data-aos="fade-up"
+                data-aos-delay="{{@index}}50"
+                class="col-lg-6"
+              >
+                <div class="position-relative mb-3">
+                  <img
+                    class="img-fluid w-100"
+                    src="data:image/jpeg;base64,{{img}}"
+                    style="object-fit: cover"
+                  />
+                  <div class="bg-white border border-top-0 p-4">
+                    <div class="mb-2">
+                      <a
+                        class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                        href=""
+                      >{{category_name}}</a>
+                      <a class="text-body" href=""><small>{{formatDate
+                            publishedDay
+                          }}</small></a>
+                    </div>
+                    <a
+                      class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold"
+                      href=""
+                    >{{title}}</a>
+                    <p class="m-0 limit-2-lines">
+                      {{decription}}
+                    </p>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between bg-white border border-top-0 p-4"
+                  >
+                    <div class="d-flex align-items-center">
+                      <img
+                        class="rounded-circle mr-2"
+                        src="../../static/img/user.jpg"
+                        width="25"
+                        height="25"
+                        alt=""
+                      />
+                      <small>{{userName}}</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <small class="ml-3"><i
+                          class="far fa-eye mr-2"
+                        ></i>{{views}}</small>
+                      <small class="ml-3"><i
+                          class="far fa-comment mr-2"
+                        ></i>{{comments}}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+            <!-- 4 small article section -->
+            <div class="col-lg-6">
+              <div
+                data-aos="fade-right"
+                data-aos-delay="150"
+                class="d-flex align-items-center bg-white mb-3"
+                style="height: 110px"
+              >
+                <img
+                  class="img-fluid"
+                  src="data:image/jpeg;base64,{{section2Articles.0.img}}"
+                  alt=""
+                />
+                <div
+                  class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
+                >
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                      href=""
+                    >{{section2Articles.0.category_name}}</a>
+                    <a class="text-body" href=""><small>{{formatDate
+                          section2Articles.0.publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                    href=""
+                  >{{section2Articles.0.title}}</a>
+                </div>
+              </div>
+              <div
+                data-aos="fade-right"
+                data-aos-delay="150"
+                class="d-flex align-items-center bg-white mb-3"
+                style="height: 110px"
+              >
+                <img
+                  class="img-fluid"
+                  src="data:image/jpeg;base64,{{section2Articles.1.img}}"
+                  alt=""
+                />
+                <div
+                  class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
+                >
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                      href=""
+                    >{{section2Articles.1.category_name}}</a>
+                    <a class="text-body" href=""><small>{{formatDate
+                          section2Articles.1.publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                    href="/baibao/{{id}}"
+                  >{{section2Articles.1.title}}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 overflow-hidden">
+              <div
+                data-aos="fade-left"
+                data-aos-delay="150"
+                class="d-flex align-items-center bg-white mb-3"
+                style="height: 110px"
+              >
+                <img
+                  class="img-fluid"
+                  src="data:image/jpeg;base64,{{section2Articles.2.img}}"
+                  alt=""
+                />
+                <div
+                  class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0 overflow-hidden"
+                >
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                      href=""
+                    >{{section2Articles.2.category_name}}</a>
+                    <a class="text-body" href=""><small>{{formatDate
+                          section2Articles.2.publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                    href="/baibao/{{id}}"
+                  >{{section2Articles.2.title}}</a>
+                </div>
+              </div>
+              <div
+                data-aos="fade-left"
+                data-aos-delay="150"
+                class="d-flex align-items-center bg-white mb-3"
+                style="height: 110px"
+              >
+                <img
+                  class="img-fluid"
+                  src="data:image/jpeg;base64,{{section2Articles.3.img}}"
+                  alt=""
+                />
+                <div
+                  class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0 overflow-hidden"
+                >
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                      href=""
+                    >{{section2Articles.3.category_name}}</a>
+                    <a class="text-body" href=""><small>{{formatDate
+                          section2Articles.3.publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                    href="/baibao/{{id}}"
+                  >{{section2Articles.3.title}}</a>
+                </div>
+              </div>
+            </div>
+            <!-- Big article section -->
+            <div data-aos="fade-right" class="col-lg-12">
+              <div class="row news-lg mx-0 mb-3">
+                <div class="col-md-6 h-100 px-0">
+                  <img
+                    class="img-fluid h-100"
+                    src="data:image/jpeg;base64,{{section3Articles.0.img}}"
+                    style="object-fit: cover"
+                  />
+                </div>
+                <div
+                  class="col-md-6 d-flex flex-column border bg-white h-100 px-0"
+                >
+                  <div class="mt-auto p-4">
+                    <div class="mb-2">
+                      <a
+                        class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                        href="/baibao/{{id}}"
+                      >{{section3Articles.0.category_name}}</a>
+                      <a class="text-body" href=""><small>{{formatDate
+                            section3Articles.0.publishedDay
+                          }}</small></a>
+                    </div>
+                    <a
+                      class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold"
+                      href="/baibao/{{id}}"
+                    >{{section3Articles.0.title}}</a>
+                    <p class="m-0 limit-2-lines">
+                      {{section3Articles.0.description}}
+                    </p>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between bg-white border-top mt-auto p-4"
+                  >
+                    <div class="d-flex align-items-center">
+                      <img
+                        class="rounded-circle mr-2"
+                        src="../../static/img/user.jpg"
+                        width="25"
+                        height="25"
+                        alt=""
+                      />
+                      <small>{{section3Articles.0.userName}}</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <small class="ml-3"><i
+                          class="far fa-eye mr-2"
+                        ></i>{{section3Articles.0.views}}</small>
+                      <small class="ml-3"><i
+                          class="far fa-comment mr-2"
+                        ></i>{{section3Articles.0.comments}}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- 4 small article section -->
+            <div class="col-lg-6">
+              <div
+                data-aos="fade-right"
+                data-aos-delay="150"
+                class="d-flex align-items-center bg-white mb-3"
+                style="height: 110px"
+              >
+                <img
+                  class="img-fluid"
+                  src="data:image/jpeg;base64,{{section4Articles.0.img}}"
+                  alt=""
+                />
+                <div
+                  class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
+                >
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                      href="/baibao/{{id}}"
+                    >{{section4Articles.0.category_name}}</a>
+                    <a class="text-body" href=""><small>{{formatDate
+                          section4Articles.0.publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                    href="/baibao/{{id}}"
+                  >{{section4Articles.0.title}}</a>
+                </div>
+              </div>
+              <div
+                data-aos="fade-right"
+                data-aos-delay="150"
+                class="d-flex align-items-center bg-white mb-3"
+                style="height: 110px"
+              >
+                <img
+                  class="img-fluid"
+                  src="data:image/jpeg;base64,{{section4Articles.1.img}}"
+                  alt=""
+                />
+                <div
+                  class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
+                >
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                      href="/baibao/{{id}}"
+                    >{{section4Articles.1.category_name}}</a>
+                    <a class="text-body" href=""><small>{{formatDate
+                          section4Articles.1.publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                    href="/baibao/{{id}}"
+                  >{{section4Articles.1.title}}</a>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 overflow-hidden">
+              <div
+                data-aos="fade-left"
+                data-aos-delay="150"
+                class="d-flex align-items-center bg-white mb-3"
+                style="height: 110px"
+              >
+                <img
+                  class="img-fluid"
+                  src="data:image/jpeg;base64,{{section4Articles.2.img}}"
+                  alt=""
+                />
+                <div
+                  class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0 overflow-hidden"
+                >
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                      href=""
+                    >{{section4Articles.2.category_name}}</a>
+                    <a class="text-body" href=""><small>{{formatDate
+                          section4Articles.2.publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                    href=""
+                  >{{section4Articles.2.title}}</a>
+                </div>
+              </div>
+              <div
+                data-aos="fade-left"
+                data-aos-delay="150"
+                class="d-flex align-items-center bg-white mb-3"
+                style="height: 110px"
+              >
+                <img
+                  class="img-fluid"
+                  src="data:image/jpeg;base64,{{section4Articles.3.img}}"
+                  alt=""
+                />
+                <div
+                  class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0 overflow-hidden"
+                >
+                  <div class="mb-2">
+                    <a
+                      class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                      href=""
+                    >{{section4Articles.3.category_name}}</a>
+                    <a class="text-body" href=""><small>{{formatDate
+                          section4Articles.3.publishedDay
+                        }}</small></a>
+                  </div>
+                  <a
+                    class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                    href=""
+                  >{{section4Articles.3.title}}</a>
+                </div>
+              </div>
+            </div>
+            <!-- tin nổi bật nhất của các danh mục -->
+            <div class="col-12">
+              <div class="section-title">
+                <h4 class="m-0 text-uppercase font-weight-bold">
+                  Tin nổi bật của các danh mục
+                </h4>
+                <a
+                  class="text-secondary font-weight-medium text-decoration-none"
+                  href=""
+                >Xem tất cả</a>
+              </div>
+            </div>
+            <!-- 4 big article section -->
+            {{#each topArticleInCategory}}
+              <div
+                data-aos="fade-up"
+                data-aos-delay="{{@index}}50"
+                class="col-lg-6"
+              >
+                <div class="position-relative mb-3">
+                  <img
+                    class="img-fluid w-100"
+                    src="data:image/jpeg;base64,{{this.img}}"
+                    style="object-fit: cover"
+                  />
+                  <div class="bg-white border border-top-0 p-4">
+                    <div class="mb-2">
+                      <a
+                        class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                        href=""
+                      >{{this.category_name}}</a>
+                      <a class="text-body" href=""><small>{{formatDate
+                            this.publishedDay
+                          }}</small></a>
+                    </div>
+                    <a
+                      class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold"
+                      href=""
+                    >{{this.title}}</a>
+                    <p class="m-0">{{this.description}}</p>
+                  </div>
+                  <div
+                    class="d-flex justify-content-between bg-white border border-top-0 p-4"
+                  >
+                    <div class="d-flex align-items-center">
+                      <img
+                        class="rounded-circle mr-2"
+                        src="../../static/img/user.jpg"
+                        width="25"
+                        height="25"
+                        alt=""
+                      />
+                      <small>{{this.userName}}</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                      <small class="ml-3"><i
+                          class="far fa-eye mr-2"
+                        ></i>{{this.views}}</small>
+                      <small class="ml-3"><i
+                          class="far fa-comment mr-2"
+                        ></i>{{this.comments}}</small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {{/each}}
+          </div>
+        </div>
+
+        <!-- SideBar -->
+        <div class="col-lg-4">
+          <!-- Social Follow End -->
+
+          <!-- Ads Start -->
+          <div class="mb-3">
+            <div class="section-title mb-0">
+              <h4 class="m-0 text-uppercase font-weight-bold">Quảng cáo</h4>
+            </div>
+            <div class="bg-white text-center border border-top-0 p-3">
+              <a href=""><img
+                  class="img-fluid"
+                  src="../../static/img/news-800x500-2.jpg"
+                  alt=""
+                /></a>
+            </div>
+          </div>
+          <!-- Ads End -->
+
+          <!-- Popular News Start -->
+          <div class="mb-3">
+            <!-- Heading -->
+            <div class="section-title mb-0">
+              <h4 class="m-0 text-uppercase font-weight-bold">
+                Tin đang hot
+              </h4>
+            </div>
+            <!-- Article list -->
+            <div class="bg-white border border-top-0 p-3">
+              {{#each topArticles}}
+                <div
+                  class="d-flex align-items-center bg-white mb-3"
+                  style="height: 110px"
+                >
+                  <img
+                    class="img-fluid"
+                    src="data:image/jpeg;base64,{{this.img}}"
+                    alt=""
+                  />
+                  <div
+                    class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
+                  >
+                    <div class="mb-2">
+                      <a
+                        class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                        href=""
+                      >
+                        {{this.category_name}}
+                      </a>
+                      <a class="text-body" href=""><small>{{formatDate
+                            this.publishedDay
+                          }}</small></a>
+                    </div>
+                    <a
+                      class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                      href=""
+                    >
+                      {{this.title}}
+                    </a>
+                  </div>
+                </div>
+              {{/each}}
+            </div>
+          </div>
+          <!-- Popular News End -->
+
+          <!-- Newsletter Start -->
+          <div class="mb-3">
+            <div class="section-title mb-0">
+              <h4 class="m-0 text-uppercase font-weight-bold">Gửi Email</h4>
+            </div>
+            <div class="bg-white text-center border border-top-0 p-3">
+              <p>Hãy gửi email cho chúng tôi để nhận tin tức mới nhất</p>
+              <div class="input-group mb-2" style="width: 100%">
+                <input
+                  type="text"
+                  class="form-control form-control-lg"
+                  placeholder="Email của bạn"
+                />
+                <div class="input-group-append">
+                  <button class="btn btn-primary font-weight-bold px-3">
+                    Gửi
+                  </button>
+                </div>
+              </div>
+              <small>Tin tức mới nhất sẽ có ngay hôm sau</small>
+            </div>
+          </div>
+          <!-- Newsletter End -->
+
+          <!-- Tags Start -->
+          <div class="mb-3">
+            <div class="section-title mb-0">
+              <h4 class="m-0 text-uppercase font-weight-bold">Danh mục</h4>
+            </div>
+            <div class="bg-white border border-top-0 p-3">
+              <div class="d-flex flex-wrap m-n1">
+                {{#each categories}}
+                  <a
+                    href=""
+                    class="btn btn-sm btn-outline-secondary m-1"
+                  >{{this.Name}}</a>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+          <!-- Tags End -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- News With Sidebar End -->
+</div>
