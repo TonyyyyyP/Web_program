@@ -1,0 +1,92 @@
+<!-- UserProfile -->
+<div class="container-fluid pt-5">
+  <div class="container">
+    <div class="row">
+      <!-- SideBar -->
+      <div class="col-12 col-sm-12 col-md-3 col-lg-3 sideBar">
+        <div>
+          <div class="heading">Quản lý tài khoản</div>
+          <div class="py-2 pl-2">
+            <div class="select cursor-pointer">Thông tin</div>
+          </div>
+        </div>
+        <div>
+          <div class="heading">Quản lý bài viết</div>
+          <div class="py-2 pl-2">
+            <div class="pb-2 cursor-pointer">Thêm bài viết</div>
+            <div class="cursor-pointer">Bài viết của bạn</div>
+          </div>
+        </div>
+      </div>
+      <!-- userProfile -->
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9">
+        <form action="">
+          <!-- Profile Picture -->
+          <div class="d-flex mb-2">
+            <div class="text-black">Avatar:</div>
+            <div class="userProfilePicWrapper">
+              <div class="overlay">
+                <button class="btn btn-primary changeBtn">Thay đổi</button>
+              </div>
+              <img
+                src="./img/news-700x435-4.jpg"
+                alt="Profile Picture"
+                class="userProfilePic"
+              />
+            </div>
+          </div>
+
+          <div class="mb-3 row">
+            <label for="staticEmail" class="col-sm-2 col-form-label text-black"
+              >Vai trò:</label
+            >
+            <div class="col-sm-10">
+              <input
+                type="text"
+                readonly
+                class="form-control-plaintext"
+                id="staticEmail"
+                value="Người dùng"
+              />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label text-black">Email:</label>
+            <input
+              type="email"
+              class="form-control"
+              id="email"
+              placeholder="name@example.com"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label text-black">Tên:</label>
+            <input
+              type="email"
+              class="form-control"
+              id="name"
+              placeholder="Tên người dùng"
+            />
+          </div>
+          <div class="mb-3">
+            <label for="phone" class="form-label text-black"
+              >Số điện thoại:</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="phone"
+              placeholder="0359256696"
+            />
+          </div>
+          <!-- save button -->
+          <div class="mt-4 d-flex justify-content-end">
+            <button class="btn btn-primary font-weight-bold px-3">
+              Lưu thay đổi
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
