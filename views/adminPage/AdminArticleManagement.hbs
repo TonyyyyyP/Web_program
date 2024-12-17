@@ -7,15 +7,15 @@
         <div>
           <div class="heading">Quản lý website</div>
           <div class="py-2 pl-2">
-            <div class="pb-2 cursor-pointer">Quản lý danh mục</div>
-            <div class="pb-2 cursor-pointer">Quản lý tag</div>
-            <div class="pb-2 cursor-pointer select">Quản lý bài viết</div>
+            <a href="/quantrivien/quanlydanhmuc"><div class="pb-2 cursor-pointer">Quản lý danh mục</div></a>
+            <a href="/quantrivien/quanlytag"><div class="pb-2 cursor-pointer">Quản lý tag</div></a>
+            <a href="/quantrivien/quanlybaibao"><div class="pb-2 cursor-pointer select">Quản lý bài viết</div></a>
           </div>
         </div>
         <div>
           <div class="heading">Quản lý người dùng</div>
           <div class="py-2 pl-2">
-            <div class="pb-2 cursor-pointer">Người dùng</div>
+            <a href="/quantrivien/quanlynguoidung"><div class="pb-2 cursor-pointer">Người dùng</div></a>
           </div>
         </div>
       </div>
@@ -76,10 +76,23 @@
                 </span>
             </td>
             <td class="action-buttons">
-                <button class="btn btn-sm btn-primary">Xem</button>
-                <button class="btn btn-sm btn-secondary">Chỉnh sửa</button>
-            </td>
-        </tr>
+            <button 
+                class="btn btn-sm btn-secondary" 
+                data-bs-toggle="modal" 
+                data-bs-target="#updateArticleModal"
+                onclick="openUpdateModal('{{this.articleId}}')"
+            >
+                Chỉnh sửa
+            </button>
+            <button
+  class="btn btn-sm btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#deleteArticleModal"
+  onclick="openDeleteModal('{{this.articleId}}')"
+>
+  Xóa
+</button>
+        </td>
         {{/each}}
     </tbody>
 </table>
@@ -184,11 +197,10 @@
   <option value="{{this.id}}">{{this.Name}}</option>
   {{/each}}
 </select>
-
           </div>
 
           <!-- Tags -->
-          <div class="form-group mb-3">
+          <div class="form-group mb-3 text-black">
   <div class="d-flex justify-content-between">
     <label for="tags" class="form-label font-weight-bold text-black">Tags</label>
     <select id="tagSelect" class="form-select" aria-label="Chọn tag">
@@ -202,7 +214,7 @@
 </div>
 
           <!-- Article Content -->
-          <div class="form-group mb-4">
+          <div class="form-group mb-4 text-black">
             <label for="articleContent" class="form-label font-weight-bold"
               >Nội dung bài viết</label
             >
@@ -225,19 +237,16 @@
 </div>
 
 <script>
-  // Xử lý khi chọn tag từ dropdown
   document.getElementById('tagSelect').addEventListener('change', function () {
     const selectedTagId = this.value;
     const selectedTagName = this.options[this.selectedIndex].text;
 
-    // Kiểm tra nếu tag đã tồn tại
     const existingTag = document.querySelector(`#selectedTags .addedTag[data-id="${selectedTagId}"]`);
     if (existingTag) {
       alert('Tag này đã được thêm!');
       return;
     }
 
-    // Tạo tag mới
     const tagDiv = document.createElement('div');
     tagDiv.className = 'addedTag';
     tagDiv.setAttribute('data-id', selectedTagId);
@@ -246,47 +255,36 @@
       <span class="close-btn">&times;</span>
     `;
 
-    // Thêm tag vào danh sách
     document.getElementById('selectedTags').appendChild(tagDiv);
-
-    // Xử lý khi nhấn nút xóa tag
     tagDiv.querySelector('.close-btn').addEventListener('click', function () {
       tagDiv.remove();
     });
-
-    // Reset dropdown về trạng thái mặc định
     this.value = '';
   });
-
-  // Xử lý khi submit form
   document.querySelector('form').addEventListener('submit', function (e) {
     e.preventDefault();
 
-    // Thu thập dữ liệu từ form
     const title = document.getElementById('articleTitle').value;
     const description = document.getElementById('articleContent').innerHTML;
     const categoryId = document.getElementById('category_id').value;
 
-    // Thu thập danh sách các tag đã chọn
     const tagIds = [];
     document.querySelectorAll('#selectedTags .addedTag').forEach(function (tagDiv) {
       tagIds.push(tagDiv.getAttribute('data-id'));
     });
 
-    // Thu thập hình ảnh
     const articleImage = document.getElementById('articleImage').files[0];
     const formData = new FormData();
-    formData.append('Title', title);
-    formData.append('Description', description);
+    formData.append('title', title);
+    formData.append('description', description);
     formData.append('category_id', categoryId);
-    formData.append('TagIDs', JSON.stringify(tagIds));
+    formData.append('tags', JSON.stringify(tagIds));
 
     if (articleImage) {
-      formData.append('ArticleImage', articleImage);
+      formData.append('image', articleImage);
     }
 
-    // Gửi dữ liệu qua fetch (AJAX)
-    fetch('/addArticle', {
+    fetch('/articleRouter/addArticle', {
       method: 'POST',
       body: formData,
     })
@@ -298,4 +296,283 @@
         console.error('Error:', error);
       });
   });
+</script>
+
+<!-- Update Article Modal -->
+<div
+  class="modal fade"
+  id="updateArticleModal"
+  tabindex="-1"
+  aria-labelledby="updateArticleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateArticleModalLabel">Cập nhật bài viết</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="updateArticleForm" method="post" enctype="multipart/form-data">
+          <!-- Article Image -->
+          <div class="form-group mb-3">
+            <label
+              for="updateArticleImage"
+              class="form-label font-weight-bold text-black"
+              >Ảnh bài viết</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="updateArticleImage"
+              name="updateArticleImage"
+              accept="image/*"
+            />
+          </div>
+          
+          <div class="form-group mb-3">
+  <label class="form-label font-weight-bold">Ảnh bài viết hiện tại</label>
+  <div class="image-container" style="width: 100%; height: 200px; overflow: hidden;">
+    <img
+      id="updateArticleImagePreview"
+      class="img-fluid"
+      style="display: none; object-fit: cover; width: 100%; height: 100%;"
+      alt="Preview"
+    />
+  </div>
+</div>
+
+
+          <!-- Article Title -->
+          <div class="form-group mb-3">
+            <label
+              for="updateArticleTitle"
+              class="form-label font-weight-bold text-black"
+              >Tiêu đề bài viết</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="updateArticleTitle"
+              name="updateArticleTitle"
+              required
+            />
+          </div>
+
+          <!-- Category -->
+          <div class="form-group mb-3">
+            
+            <label
+              for="updateCategory"
+              class="form-label font-weight-bold text-black"
+              >Danh mục</label
+            >
+            <select
+              class="form-select"
+              id="updateCategory"
+              name="updateCategory"
+              required
+            >
+              <option selected disabled>Chọn danh mục</option>
+              {{#each categories}}
+              <option value="{{this.id}}">{{this.Name}}</option>
+              {{/each}}
+            </select>
+          </div>
+
+          <!-- Tags -->
+          <div class="form-group mb-3 text-black">
+            <div class="d-flex justify-content-between">
+            <label for="updateTags" class="form-label font-weight-bold">Tags</label>
+            <select id="updateTagSelect" class="form-select">
+              <option selected disabled>Chọn một tag</option>
+              {{#each tags}}
+              <option value="{{this.id}}">{{this.name}}</option>
+              {{/each}}
+            </select>
+            </div>
+            <div id="updateSelectedTags" class="mt-2"></div>
+          </div>
+
+          <!-- Article Content -->
+          <div class="form-group mb-4 text-black">
+            <label for="updateArticleContent" class="form-label font-weight-bold"
+              >Nội dung bài viết</label
+            >
+            <div
+              id="updateArticleContent"
+              style="height: 400px; background: #fff"
+            ></div>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary font-weight-bold px-4">
+              Cập nhật bài viết
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  async function openUpdateModal(articleId) {
+  try {
+    const response = await fetch(`/articleRouter/${articleId}`);
+    if (!response.ok) {
+      throw new Error("Không thể lấy dữ liệu bài viết");
+    }
+
+    const article = await response.json();
+
+    console.log(article)
+    document.getElementById("updateArticleTitle").value = article.title;
+    document.getElementById("updateCategory").value = article.category.id;
+    document.getElementById("updateArticleContent").innerHTML = article.description;
+    
+    const imagePreview = document.getElementById("updateArticleImagePreview");
+    if (article.img) {
+      const base64Image = "data:image/jpeg;base64," + article.img;
+      imagePreview.style.display = "block"; 
+      imagePreview.src = base64Image; 
+    } else {
+      imagePreview.style.display = "none"; 
+    }
+
+    const selectedTags = document.getElementById("updateSelectedTags");
+selectedTags.innerHTML = "";
+article.tags.forEach((tag) => {
+  const tagDiv = document.createElement("div");
+  tagDiv.className = "addedTag";
+  tagDiv.setAttribute("data-id", tag.id);
+  tagDiv.innerHTML = `
+    ${tag.name}
+    <span class="close-btn">&times;</span>
+  `;
+
+  tagDiv.querySelector(".close-btn").addEventListener("click", function () {
+    tagDiv.remove();
+  });
+  selectedTags.appendChild(tagDiv);
+});
+
+    // Hiển thị modal
+    const updateModal = new bootstrap.Modal(document.getElementById("updateArticleModal"));
+    updateModal.show();
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu bài viết:", error);
+    alert("Không thể mở modal cập nhật bài viết!");
+  }
+}
+
+
+  document.getElementById("updateArticleForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const articleId = document.getElementById("updateArticleId").value;
+    const title = document.getElementById("updateArticleTitle").value;
+    const content = document.getElementById("updateArticleContent").innerHTML;
+    const categoryId = document.getElementById("updateCategory").value;
+
+    const tagIds = [];
+    document.querySelectorAll("#updateSelectedTags .addedTag").forEach((tag) => {
+      tagIds.push(tag.getAttribute("data-id"));
+    });
+
+    const formData = new FormData();
+    formData.append("articleId", articleId);
+    formData.append("title", title);
+    formData.append("content", content);
+    formData.append("categoryId", categoryId);
+    formData.append("tags", JSON.stringify(tagIds));
+
+    const image = document.getElementById("updateArticleImage").files[0];
+    if (image) {
+      formData.append("image", image);
+    }
+
+    try {
+      const response = await fetch("/articleRouter/updateArticle", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        location.reload(); 
+      } else {
+        throw new Error(data.message || "Lỗi không xác định");
+      }
+    } catch (error) {
+      console.error("Error updating article:", error);
+      alert("Không thể cập nhật bài viết!");
+    }
+  });
+</script>
+
+<!-- Delete Article Modal -->
+<div
+  class="modal fade"
+  id="deleteArticleModal"
+  tabindex="-1"
+  aria-labelledby="deleteArticleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteArticleModalLabel">Xóa bài viết</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn xóa bài viết với ID: <span id="deleteArticleId" class="fw-bold text-danger"></span>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" id="confirmDeleteButton" class="btn btn-primary">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openDeleteModal(articleId) {
+    document.getElementById("deleteArticleId").textContent = articleId;
+    const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+    confirmDeleteButton.onclick = function () {
+      deleteArticle(articleId);
+    };
+  }
+
+  function deleteArticle(articleId) {
+    fetch(`/articleRouter/deleteArticle/${articleId}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.message || "Xóa bài viết thành công!");
+        const deleteModal = bootstrap.Modal.getInstance(
+          document.getElementById("deleteArticleModal")
+        );
+        deleteModal.hide();
+        location.reload();
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+        alert("Có lỗi xảy ra, vui lòng thử lại!");
+      });
+  }
 </script>
