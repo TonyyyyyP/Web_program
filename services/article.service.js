@@ -5,8 +5,60 @@ export default {
     return db("article");
   },
 
-  getArticleById(articleId) {
-    return db("article").where("ArticleID", articleId).first();
+  async getArticleById(articleId) {
+    try {
+      const article = await db("article")
+        .join("category", "article.category_id", "=", "category.id")
+        .leftJoin("article_tag", "article.id", "=", "article_tag.article_id")
+        .leftJoin("Tag", "article_tag.tag_id", "=", "Tag.id")
+        .select(
+          "article.id as articleId",
+          "article.title",
+          "article.img",
+          "article.description",
+          "article.publishedDay",
+          "category.id as categoryId",
+          "category.name as categoryName",
+          db.raw("GROUP_CONCAT(Tag.id) as tagIds"),
+          db.raw("GROUP_CONCAT(Tag.name) as tagNames")
+        )
+        .where("article.id", articleId)
+        .groupBy(
+          "article.id",
+          "article.title",
+          "article.img",
+          "article.description",
+          "article.publishedDay",
+          "category.id",
+          "category.name"
+        )
+        .first();
+
+      if (!article) {
+        throw new Error("Article not found");
+      }
+
+      return {
+        id: article.articleId,
+        title: article.title,
+        img: article.img,
+        description: article.description,
+        publishedDay: article.publishedDay,
+        category: {
+          id: article.categoryId,
+          name: article.categoryName,
+        },
+        tags: article.tagIds
+          ? article.tagIds.split(",").map((id, index) => ({
+              id: parseInt(id, 10),
+              name: article.tagNames.split(",")[index],
+            }))
+          : [],
+      };
+    } catch (error) {
+      console.error("Error fetching article by ID:", error.message);
+      throw error;
+    }
   },
 
   async addArticle(newArticle) {
@@ -22,20 +74,27 @@ export default {
   },
 
   deleteArticle(articleId) {
-    return db("article").where("ArticleID", articleId).del();
+    return db("article").where("id", articleId).del();
   },
 
   updateArticle(articleId, updatedArticle) {
     return db("article").where("ArticleID", articleId).update(updatedArticle);
   },
 
-  async addTagsToArticle(articleId, tagIds) {
-    const tagsToInsert = tagIds.map((tagId) => ({
-      article_id: articleId,
-      tag_id: tagId,
-    }));
+  addTagsToArticle(articleId, tagIds) {
+    try {
+      const tagsToInsert = tagIds.map((tagId) => ({
+        article_id: articleId,
+        tag_id: tagId,
+      }));
 
-    await db("article_tag").insert(tagsToInsert);
+      if (tagsToInsert.length > 0) {
+        db("article_tag").insert(tagsToInsert);
+      }
+    } catch (error) {
+      console.error("Lỗi khi thêm tag vào bài viết:", error);
+      throw new Error("Không thể thêm tag vào bài viết.");
+    }
   },
 
   async getTopArticles(limit = 5) {
