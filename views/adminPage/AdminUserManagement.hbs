@@ -57,48 +57,254 @@
             </tr>
           </thead>
           <tbody>
+            {{#each users}}
             <tr>
-              <td>1</td>
+              <td>{{this.id}}</td>
               <td>
                 <img src="./img/news-110x110-1.jpg" alt="User Image" />
               </td>
-              <td>Nguyễn Văn A</td>
-              <td>nguyenvana@example.com</td>
-              <td>0901234567</td>
+              <td>{{this.name}}</td>
+              <td>{{this.username}}</td>
+              <td>{{this.phoneNumber}}</td>
               <td class="action-buttons">
-                <button class="btn btn-sm btn-primary">Chỉnh sửa</button>
-                <button class="btn btn-sm btn-danger">Xóa</button>
+                <button 
+                  class="btn btn-sm btn-primary" 
+                  data-bs-toggle="modal"
+                  data-bs-target="#updateUserModal"
+                  onclick="openUpdateUserModal('{{this.id}}')">Chỉnh sửa</button>
+                <button 
+                  class="btn btn-sm btn-danger"
+                  data-bs-toggle="modal"
+                  data-bs-target="#deleteUserModal"
+                  onclick="openDeleteUserModal('{{this.id}}')">Xóa</button>
               </td>
             </tr>
-            <tr>
-              <td>2</td>
-              <td>
-                <img src="./img/news-110x110-2.jpg" alt="User Image" />
-              </td>
-              <td>Trần Thị B</td>
-              <td>tranthib@example.com</td>
-              <td>0987654321</td>
-              <td class="action-buttons">
-                <button class="btn btn-sm btn-primary">Chỉnh sửa</button>
-                <button class="btn btn-sm btn-danger">Xóa</button>
-              </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>
-                <img src="./img/news-110x110-3.jpg" alt="User Image" />
-              </td>
-              <td>Lê Văn C</td>
-              <td>levanc@example.com</td>
-              <td>0912345678</td>
-              <td class="action-buttons">
-                <button class="btn btn-sm btn-primary">Chỉnh sửa</button>
-                <button class="btn btn-sm btn-danger">Xóa</button>
-              </td>
-            </tr>
+            {{/each}}
           </tbody>
         </table>
       </div>
     </div>
   </div>
 </div>
+
+<!-- Update user -->
+<div
+  class="modal fade"
+  id="updateUserModal"
+  tabindex="-1"
+  aria-labelledby="updateUserModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5
+          class="modal-title"
+          id="updateUserModalLabel"
+          data-bs-toggle="modal"
+          data-bs-target="#updateUserModal"
+        >Chỉnh sửa người dùng
+        <input type="hidden" id="updateUserId" />
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          id="updateUserForm"
+          method="post"
+          enctype="multipart/form-data"
+        >
+        <input type="hidden" id="updateUserId" />
+          <div class="form-group mb-3">
+            <label
+              for="updateUserName"
+              class="form-label font-weight-bold text-black"
+            >Tên đăng nhập</label>
+            <input
+              type="text"
+              class="form-control"
+              id="updateUserName"
+              name="updateUserName"
+              placeholder="Nhập tên danh mục"
+              required
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label
+              for="updateName"
+              class="form-label font-weight-bold text-black"
+            >Tên người dùng</label>
+            <input
+              type="text"
+              class="form-control"
+              id="updateName"
+              name="updateName"
+              placeholder="Nhập tên danh mục"
+              required
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label
+              for="updatePhoneNumber"
+              class="form-label font-weight-bold text-black"
+            >Số điện thoại người dùng</label>
+            <input
+              type="text"
+              class="form-control"
+              id="updatePhoneNumber"
+              name="updatePhoneNumber"
+              placeholder="Nhập tên danh mục"
+              required
+            />
+          </div>
+
+          <div class="form-group mb-3">
+            <label
+              for="updatePermission"
+              class="form-label font-weight-bold text-black"
+            >Quyền hạn người dùng</label>
+            <input
+              type="text"
+              class="form-control"
+              id="updatePermission"
+              name="updatePermission"
+              placeholder=""
+              required
+            />
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button
+              type="submit"
+              class="btn btn-primary font-weight-bold px-4"
+            >Chỉnh sửa</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete User -->
+<div
+  class="modal fade"
+  id="deleteUserModal"
+  tabindex="-1"
+  aria-labelledby="deleteUserModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteUserModalLabel">Xóa danh mục</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn xóa danh mục với ID:
+          <span id="deleteUserId" class="fw-bold text-danger"></span>?</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >Hủy</button>
+        <button
+          type="button"
+          id="confirmDeleteButton"
+          class="btn btn-primary"
+        >Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // update User
+async function openUpdateUserModal(id) {
+  try {
+    const response = await fetch(`/accountRouter/${id}`);
+    const user = await response.json();
+    console.log(user);
+    document.getElementById("updateUserId").value = user.id;
+    document.getElementById("updateUserName").value = user.username;
+    document.getElementById("updateName").value = user.name;
+    document.getElementById("updatePhoneNumber").value = user.phoneNumber;
+    document.getElementById("updatePermission").value = user.permission;
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu danh mục:", error);
+    alert("Không thể mở modal cập nhật danh mục!");
+  }
+}
+
+document
+  .getElementById("updateUserForm")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById("updateUserId").value;
+    const username = document.getElementById("updateUserName").value;
+    const name = document.getElementById("updateName").value;
+    const phoneNumber = document.getElementById("updatePhoneNumber").value;
+    const permission = document.getElementById("updatePermission").value;
+
+    const formData = new FormData();
+    formData.append("id", id);
+    formData.append("username", username);
+    formData.append("name", name);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("permission", permission);
+
+    fetch("/accountRouter/update", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        alert(data.message);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+
+  //   delete User
+function openDeleteUserModal(id) {
+  document.getElementById("deleteUserId").textContent = id;
+  const confirmDeleteButton = document.getElementById("confirmDeleteButton");
+  confirmDeleteButton.onclick = function () {
+    deleteUser(id);
+  };
+}
+
+function deleteUser(id) {
+  fetch(`/accountRouter/delete/${id}`, {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      alert(data.message || "Xóa User thành công!");
+      const deleteModal = bootstrap.Modal.getInstance(
+        document.getElementById("deleteUserModal")
+      );
+      deleteModal.hide();
+      location.reload();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Có lỗi xảy ra, vui lòng thử lại!");
+    });
+}
+</script>
