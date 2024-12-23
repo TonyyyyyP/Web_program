@@ -7,15 +7,19 @@ import session from "express-session";
 import hbs_section from "express-handlebars-sections";
 
 // Import custom services and routes
-import categoryRouter from "./old_folder/old_routes/category.route.js";
-import productRouter from "./old_folder/old_routes/product.route.js";
-import productUserRouter from "./old_folder/old_routes/product-user.route.js";
-import accountRouter from "./old_folder/old_routes/account.route.js";
+// import categoryRouter from "./old_folder/old_routes/category.route.js";
+// import productRouter from "./old_folder/old_routes/product.route.js";
+// import productUserRouter from "./old_folder/old_routes/product-user.route.js";
+// import accountRouter from "./old_folder/old_routes/account.route.js";
 import ArticleService from "./services/article.service.js";
 import CategoryService from "./services/category.service.js";
 import TagService from "./services/tag.service.js";
-import { isAuth, isAdmin } from "./middlewares/auth.mdw.js";
-
+import UserService from "./services/user.service.js";
+import articleRouter from "./routes/article.route.js";
+import categoryRouter from "./routes/category.route.js";
+import tagRouter from "./routes/tag.route.js";
+import accountRouter from "./routes/account.route.js";
+// import { isAuth, isAdmin } from "./middlewares/auth.mdw.js";
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -183,35 +187,21 @@ app.get("/quantrivien/quanlybaibao", async (req, res) => {
   });
 });
 
-app.post("/addArticle", async (req, res) => {
-  console.log("Request Body:", req.body);
-  console.log("Uploaded File:", req.file);
-  try {
-    const { title, content, category_id, tagIds } = req.body;
-    const newArticle = await ArticleService.addArticle({
-      title,
-      content,
-      category_id,
-      tagIds,
-    });
-
-    res.redirect("/quantrivien/quanlybaibao");
-  } catch (error) {
-    console.error("Error creating article:", error);
-    res.status(500).send("Error creating article");
-  }
+app.get("/quantrivien/quanlydanhmuc", async (req, res) => {
+  const categories = await CategoryService.getAllCategories();
+  res.render("adminPage/AdminCategoryManagement", {
+    categories,
+  });
 });
 
-app.get("/quantrivien/quanlydanhmuc", (req, res) => {
-  res.render("adminPage/AdminCategoryManagement");
+app.get("/quantrivien/quanlytag", async (req, res) => {
+  const tags = await TagService.getAllTags();
+  res.render("adminPage/AdminTagManagement", { tags });
 });
 
-app.get("/quantrivien/quanlytag", (req, res) => {
-  res.render("adminPage/AdminTagManagement");
-});
-
-app.get("/quantrivien/quanlynguoidung", (req, res) => {
-  res.render("adminPage/AdminUserManagement");
+app.get("/quantrivien/quanlynguoidung", async (req, res) => {
+  const users = await UserService.getAllUsers();
+  res.render("adminPage/AdminUserManagement", {users});
 });
 
 // UserPage route
@@ -227,10 +217,15 @@ app.get("/nguoidung/thongtin", (req, res) => {
   res.render("userPage/UserProfilePage");
 });
 
-app.use("/admin/categories", isAuth, isAdmin, categoryRouter);
-app.use("/admin/products", isAuth, isAdmin, productRouter);
-app.use("/products", productUserRouter);
-app.use("/account", accountRouter);
+app.use("/articleRouter", articleRouter);
+app.use("/categoryRouter", categoryRouter);
+app.use("/tagRouter", tagRouter);
+app.use("/accountRouter", accountRouter);
+
+// app.use("/admin/categories", isAuth, isAdmin, categoryRouter);
+// app.use("/admin/products", isAuth, isAdmin, productRouter);
+// app.use("/products", productUserRouter);
+// app.use("/account", accountRouter);
 
 // Start server
 app.listen(3000, () => {
