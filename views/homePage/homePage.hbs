@@ -27,7 +27,7 @@
                 </div>
                 <a
                   class="h2 m-0 text-white text-uppercase font-weight-bold"
-                  href="/baibao/{{id}}"
+                  href="/baibao/{{articleId}}"
                 >{{title}}</a>
               </div>
             </div>
@@ -63,7 +63,7 @@
                   </div>
                   <a
                     class="h6 m-0 text-white text-uppercase font-weight-semi-bold"
-                    href="/baibao/{{id}}"
+                    href="/baibao/{{articleId}}"
                   >{{title}}</a>
                 </div>
               </div>
@@ -95,7 +95,7 @@
                 <div class="text-truncate">
                   <a
                     class="text-white text-uppercase font-weight-semi-bold"
-                    href="/baibao/{{id}}"
+                    href="/baibao/{{articleId}}"
                   >{{title}}</a>
                 </div>
               {{/each}}
@@ -141,7 +141,7 @@
               </div>
               <a
                 class="h6 m-0 text-white text-uppercase font-weight-semi-bold"
-                href="/baibao/{{id}}"
+                href="/baibao/{{articleId}}"
               >
                 {{title}}
               </a>
@@ -197,7 +197,7 @@
                     </div>
                     <a
                       class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold"
-                      href=""
+                      href="/baibao/{{articleId}}"
                     >{{title}}</a>
                     <p class="m-0 limit-2-lines">
                       {{decription}}
@@ -255,7 +255,7 @@
                   </div>
                   <a
                     class="h6 m-0 text-secondary text-uppercase font-weight-bold"
-                    href=""
+                    href="/baibao/{{articleId}}"
                   >{{section2Articles.0.title}}</a>
                 </div>
               </div>
@@ -629,11 +629,12 @@
                   class="d-flex align-items-center bg-white mb-3"
                   style="height: 110px"
                 >
-                  <img
-                    class="img-fluid"
-                    src="data:image/jpeg;base64,{{this.img}}"
-                    alt=""
-                  />
+                 <img
+    class="img-fluid"
+    src="data:image/jpeg;base64,{{this.img}}"
+    alt=""
+    style="object-fit: cover; height: 100%; width: 110px;"
+  />
                   <div
                     class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
                   >
@@ -650,7 +651,7 @@
                     </div>
                     <a
                       class="h6 m-0 text-secondary text-uppercase font-weight-bold"
-                      href=""
+                      href="/baibao/{{articleId}}"
                     >
                       {{this.title}}
                     </a>
