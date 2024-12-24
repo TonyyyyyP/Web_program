@@ -1,642 +1,650 @@
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <title>BizNews - Free News Website Template</title>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <meta content="Free HTML Templates" name="keywords" />
-    <meta content="Free HTML Templates" name="description" />
+<head>
+<meta charset="utf-8" />
+<title>BizNews - Free News Website Template</title>
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<meta content="Free HTML Templates" name="keywords" />
+<meta content="Free HTML Templates" name="description" />
 
-    <!-- Favicon -->
-    <link href="img/favicon.ico" rel="icon" />
+<!-- Favicon -->
+<link href="img/favicon.ico" rel="icon" />
 
-    <!-- Google Web Fonts -->
-    <link rel="preconnect" href="https://fonts.gstatic.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+<!-- Google Web Fonts -->
+<link rel="preconnect" href="https://fonts.gstatic.com" />
+<link
+href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+rel="stylesheet"
+/>
 
-    <!-- Font Awesome -->
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
-      rel="stylesheet"
-    />
+<!-- Font Awesome -->
+<link
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css"
+rel="stylesheet"
+/>
 
-    <!-- Libraries Stylesheet -->
-    <link
-      href="../../static/lib/owlcarousel/assets/owl.carousel.min.css"
-      rel="stylesheet"
-    />
+<!-- Libraries Stylesheet -->
+<link
+href="../../static/lib/owlcarousel/assets/owl.carousel.min.css"
+rel="stylesheet"
+/>
 
-    <!-- Customized Bootstrap Stylesheet -->
-    <link href="../../static/css/style.css" rel="stylesheet" type="text/css" />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-    ></script>
+<!-- Customized Bootstrap Stylesheet -->
+<link href="../../static/css/style.css" rel="stylesheet" type="text/css" />
+   <script
+     src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+   ></script>
 
-    <!-- AOS -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<!-- AOS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-    <!-- Quill-->
-    <link
-      href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
-      rel="stylesheet"
-    />
+<!-- Quill-->
+<link
+href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css"
+rel="stylesheet"
+/>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"
-    ></script>
+   <script
+     src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"
+   ></script>
 
-    {{{_sections.css}}}
-  </head>
+{{{_sections.css}}}
+</head>
 
-  <body>
+<body>
 
-    <script>
-      AOS.init({ offset: 100, delay: 0, duration: 1000, easing: "ease-in-out",
-      once: false, });
-    </script>
+   <script>
+     AOS.init({ offset: 100, delay: 0, duration: 1000, easing: "ease-in-out",
+     once: false, });
+   </script>
 
-    <!-- Topbar Start -->
-    <div class="container-fluid d-none d-lg-block">
-      <div class="row align-items-center bg-dark px-lg-5">
-        <div class="col-lg-9">
-          <nav class="navbar navbar-expand-sm bg-dark p-0">
-            <ul class="navbar-nav ml-n2">
-              <li class="nav-item border-right border-secondary">
-                <a class="nav-link text-body small" href="#">Monday, January 1,
-                  2045</a>
-              </li>
-              {{#if isLoggedIn}}
-    <li class="nav-item">
-      <div class="nav-link text-body small">
-        Chào, {{authUser.username}}
-      </div>
-    </li>
-    <li class="nav-item">
-      <form id="logoutForm" method="POST" style="display: none;">
-  <button type="submit" id="logoutButton">Đăng xuất</button>
+<!-- Topbar Start -->
+<div class="container-fluid d-none d-lg-block">
+<div class="row align-items-center bg-dark px-lg-5">
+<div class="col-lg-9">
+<nav class="navbar navbar-expand-sm bg-dark p-0">
+<ul class="navbar-nav ml-n2">
+<li class="nav-item border-right border-secondary">
+<a class="nav-link text-body small" href="#">Monday, January 1,
+2045</a>
+</li>
+{{#if isLoggedIn}}
+<li class="nav-item">
+<div class="nav-link text-body small">
+Chào, {{authUser.username}}
+</div>
+</li>
+<li class="nav-item">
+<form id="logoutForm" method="POST" style="display: none;">
+<button type="submit" id="logoutButton">Đăng xuất</button>
 </form>
 
 <div class="nav-link text-body small cursor-pointer" id="logoutLink">Đăng xuất</div>
-    </li>
-  {{else}}
-    <li class="nav-item border-right border-secondary">
-      <div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#registerModal">
-        Đăng ký
-      </div>
-    </li>
-    <li class="nav-item">
-      <div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#loginModal">
-        Đăng nhập
-      </div>
-    </li>
-  {{/if}}
-            </ul>
-          </nav>
-        </div>
-        <div class="col-lg-3 text-right d-none d-md-block">
-          <nav class="navbar navbar-expand-sm bg-dark p-0">
-            <ul class="navbar-nav ml-auto mr-n2">
-              <li class="nav-item">
-                <a class="nav-link text-body" href="#"><small
-                    class="fab fa-twitter"
-                  ></small></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-body" href="#"><small
-                    class="fab fa-facebook-f"
-                  ></small></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-body" href="#"><small
-                    class="fab fa-linkedin-in"
-                  ></small></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-body" href="#"><small
-                    class="fab fa-instagram"
-                  ></small></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-body" href="#"><small
-                    class="fab fa-google-plus-g"
-                  ></small></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-body" href="#"><small
-                    class="fab fa-youtube"
-                  ></small></a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </div>
-    <!-- Topbar End -->
+</li>
+{{else}}
+<li class="nav-item border-right border-secondary">
+<div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#registerModal">
+Đăng ký
+</div>
+</li>
+<li class="nav-item">
+<div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#loginModal">
+Đăng nhập
+</div>
+</li>
+{{/if}}
+</ul>
+</nav>
+</div>
+<div class="col-lg-3 text-right d-none d-md-block">
+<nav class="navbar navbar-expand-sm bg-dark p-0">
+<ul class="navbar-nav ml-auto mr-n2">
+<li class="nav-item">
+<a class="nav-link text-body" href="#"><small
+class="fab fa-twitter"
+></small></a>
+</li>
+<li class="nav-item">
+<a class="nav-link text-body" href="#"><small
+class="fab fa-facebook-f"
+></small></a>
+</li>
+<li class="nav-item">
+<a class="nav-link text-body" href="#"><small
+class="fab fa-linkedin-in"
+></small></a>
+</li>
+<li class="nav-item">
+<a class="nav-link text-body" href="#"><small
+class="fab fa-instagram"
+></small></a>
+</li>
+<li class="nav-item">
+<a class="nav-link text-body" href="#"><small
+class="fab fa-google-plus-g"
+></small></a>
+</li>
+<li class="nav-item">
+<a class="nav-link text-body" href="#"><small
+class="fab fa-youtube"
+></small></a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</div>
+<!-- Topbar End -->
 
-    <!-- Navbar Start -->
+<!-- Navbar Start -->
 
-    <div class="container-fluid p-0">
-      <nav
-        class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5"
-      >
-        <a href="/" class="navbar-brand d-block d-lg-none">
-          <h1 class="m-0 display-4 text-uppercase text-primary">
-            Biz<span class="text-white font-weight-normal">News</span>
-          </h1>
-        </a>
-        <button
-          type="button"
-          class="navbar-toggler"
-          data-toggle="collapse"
-          data-target="#navbarCollapse"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div
-          class="collapse navbar-collapse justify-content-between px-0 px-lg-3"
-          id="navbarCollapse"
-        >
-          <div class="navbar-nav mr-auto py-0">
-            <a href="" class="d-flex align-items-center pr-xl-3">
-              <h1 class="m-0 fs-4 text-uppercase text-primary">
-                Biz<span class="text-white font-weight-normal">News</span>
-              </h1>
-            </a>
+<div class="container-fluid p-0">
+<nav
+class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5"
+>
+<a href="/" class="navbar-brand d-block d-lg-none">
+<h1 class="m-0 display-4 text-uppercase text-primary">
+Biz<span class="text-white font-weight-normal">News</span>
+</h1>
+</a>
+<button
+type="button"
+class="navbar-toggler"
+data-toggle="collapse"
+data-target="#navbarCollapse"
+>
+<span class="navbar-toggler-icon"></span>
+</button>
+<div
+class="collapse navbar-collapse justify-content-between px-0 px-lg-3"
+id="navbarCollapse"
+>
+<div class="navbar-nav mr-auto py-0">
+<a href="" class="d-flex align-items-center pr-xl-3">
+<h1 class="m-0 fs-4 text-uppercase text-primary">
+Biz<span class="text-white font-weight-normal">News</span>
+</h1>
+</a>
 
-            <a href="" class="nav-item nav-link active">Trang chủ</a>
-            <a href="single.html" class="nav-item nav-link">Tin mới</a>
-            <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link dropdown-toggle"
-                data-toggle="dropdown"
-              >Danh mục</a>
-              <div class="dropdown-menu rounded-0 m-0">
-                <a href="#" class="dropdown-item">Nông sản</a>
-                <a href="#" class="dropdown-item">Hải sản</a>
-              </div>
-            </div>
-            <a href="contact.html" class="nav-item nav-link">Liên hệ</a>
-          </div>
-          <div
-            data-aos="fade-left"
-            class="input-group ml-auto d-none d-lg-flex"
-            style="width: 100%; max-width: 300px"
-          >
-            <input
-              type="text"
-              class="form-control border-0"
-              placeholder="Từ khóa"
-            />
-            <div class="input-group-append">
-              <button
-                class="input-group-text bg-primary text-dark border-0 px-3"
-              >
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-          </div>
-        <div class="nav-item dropdown">
-              <a
-                href="#"
-                class="nav-link"
-                data-toggle="dropdown"
-              >
-              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
-  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
-  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+<a href="" class="nav-item nav-link active">Trang chủ</a>
+<a href="single.html" class="nav-item nav-link">Tin mới</a>
+<div class="nav-item dropdown">
+<a
+href="#"
+class="nav-link dropdown-toggle"
+data-toggle="dropdown"
+>Danh mục</a>
+<div class="dropdown-menu rounded-0 m-0">
+<a href="#" class="dropdown-item">Nông sản</a>
+<a href="#" class="dropdown-item">Hải sản</a>
+</div>
+</div>
+<a href="contact.html" class="nav-item nav-link">Liên hệ</a>
+</div>
+<div
+data-aos="fade-left"
+class="input-group ml-auto d-none d-lg-flex"
+style="width: 100%; max-width: 300px"
+>
+<input
+type="text"
+class="form-control border-0"
+placeholder="Từ khóa"
+/>
+<div class="input-group-append">
+<button
+class="input-group-text bg-primary text-dark border-0 px-3"
+>
+<i class="fa fa-search"></i>
+</button>
+</div>
+</div>
+{{#if isLoggedIn}}
+<div class="nav-item dropdown">
+<a
+href="#"
+class="nav-link"
+data-toggle="dropdown"
+>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+<path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+<path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
 </svg>
-              </a>
-              <div class="dropdown-menu rounded-0 m-0">
-                <a href="/nguoidung/thongtin" class="dropdown-item">Tài khoản</a>
-              </div>
-            </div>
+</a>
+<div class="dropdown-menu rounded-0 m-0">
+                {{#if (eq authUser.permission "admin")}}
+  <a href="/quantrivien/quanlydanhmuc" class="dropdown-item">Quản trị trang</a>
+{{/if}}
 
-        </div>
-      </nav>
-    </div>
-    <!-- Navbar End -->
+{{#if (eq authUser.permission "editor")}}
+  <a href="/bientap" class="dropdown-item">Biên tập</a>
+{{/if}}
 
-    {{! mainContent }}
-    {{{body}}}
+<a href="/nguoidung/thongtin" class="dropdown-item">Tài khoản</a>
+</div>
+</div>
+{{/if}}
+</div>
+</nav>
+</div>
+<!-- Navbar End -->
 
-    <!-- Footer Start -->
-    <div class="container-fluid bg-dark pt-5 px-sm-3 px-md-5 mt-5">
-      <div class="row py-4">
-        <div class="col-lg-3 col-md-6 mb-5">
-          <h5 class="mb-4 text-white text-uppercase font-weight-bold">
-            Về trang web
-          </h5>
-          <div class="row">
-            <a href="index.html" class="navbar-brand d-block">
-              <h1 class="m-0 display-4 text-uppercase text-primary">
-                Biz<span class="text-white font-weight-normal">News</span>
-              </h1>
-            </a>
-            <div class="px-2">
-              <p>Hãy gửi email cho chúng tôi để nhận tin tức mới nhất</p>
-              <div class="input-group mb-2" style="width: 100%">
-                <input
-                  type="text"
-                  class="form-control form-control-lg"
-                  placeholder="Email của bạn"
-                />
-                <div class="input-group-append">
-                  <button class="btn btn-primary font-weight-bold px-3">
-                    Gửi
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-5">
-          <h5 class="mb-4 text-white text-uppercase font-weight-bold">
-            Tin tức mới
-          </h5>
-          {{#each topThreeArticlesForLeftHeader}}
-            <div class="mb-3">
-              <div class="mb-2">
-                <a
-                  class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
-                  href=""
-                >{{this.category_name}}</a>
-                <a class="text-body" href=""><small>{{formatDate
-                      this.publishedDay
-                    }}</small></a>
-              </div>
-              <a
-                class="small text-body text-uppercase font-weight-medium"
-                href="/baibao/{{id}}"
-              >{{this.title}}</a>
-            </div>{{/each}}
-        </div>
-        <div class="col-lg-3 col-md-6 mb-5">
-          <h5 class="mb-4 text-white text-uppercase font-weight-bold">
-            Danh mục
-          </h5>
-          <div class="m-n1">
-            {{#each lcCategories}}
-              <a
-                href=""
-                class="btn btn-sm btn-outline-secondary m-1"
-              >{{this.Name}}</a>
-            {{/each}}
-          </div>
+{{! mainContent }}
+{{{body}}}
 
-        </div>
-        <div class="col-lg-3 col-md-6 mb-5">
-          <h5 class="mb-4 text-white text-uppercase font-weight-bold">
-            Get In Touch
-          </h5>
-          <p class="font-weight-medium">
-            <i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA
-          </p>
-          <p class="font-weight-medium">
-            <i class="fa fa-phone-alt mr-2"></i>+012 345 67890
-          </p>
-          <p class="font-weight-medium">
-            <i class="fa fa-envelope mr-2"></i>info@example.com
-          </p>
-          <h6 class="mt-4 mb-3 text-white text-uppercase font-weight-bold">
-            Follow Us
-          </h6>
-          <div class="d-flex justify-content-start">
-            <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i
-                class="fab fa-twitter"
-              ></i></a>
-            <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i
-                class="fab fa-facebook-f"
-              ></i></a>
-            <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i
-                class="fab fa-linkedin-in"
-              ></i></a>
-            <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i
-                class="fab fa-instagram"
-              ></i></a>
-            <a class="btn btn-lg btn-secondary btn-lg-square" href="#"><i
-                class="fab fa-youtube"
-              ></i></a>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="container-fluid py-4 px-sm-3 px-md-5"
-      style="background: #111111"
-    >
-      <p class="m-0 text-center">
-        &copy;
-        <a href="#">Your Site Name</a>. All Rights Reserved.
+<!-- Footer Start -->
+<div class="container-fluid bg-dark pt-5 px-sm-3 px-md-5 mt-5">
+<div class="row py-4">
+<div class="col-lg-3 col-md-6 mb-5">
+<h5 class="mb-4 text-white text-uppercase font-weight-bold">
+Về trang web
+</h5>
+<div class="row">
+<a href="index.html" class="navbar-brand d-block">
+<h1 class="m-0 display-4 text-uppercase text-primary">
+Biz<span class="text-white font-weight-normal">News</span>
+</h1>
+</a>
+<div class="px-2">
+<p>Hãy gửi email cho chúng tôi để nhận tin tức mới nhất</p>
+<div class="input-group mb-2" style="width: 100%">
+<input
+type="text"
+class="form-control form-control-lg"
+placeholder="Email của bạn"
+/>
+<div class="input-group-append">
+<button class="btn btn-primary font-weight-bold px-3">
+Gửi
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="col-lg-3 col-md-6 mb-5">
+<h5 class="mb-4 text-white text-uppercase font-weight-bold">
+Tin tức mới
+</h5>
+{{#each topThreeArticlesForLeftHeader}}
+<div class="mb-3">
+<div class="mb-2">
+<a
+class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+href=""
+>{{this.category_name}}</a>
+<a class="text-body" href=""><small>{{formatDate
+this.publishedDay
+}}</small></a>
+</div>
+<a
+class="small text-body text-uppercase font-weight-medium"
+href="/baibao/{{id}}"
+>{{this.title}}</a>
+</div>{{/each}}
+</div>
+<div class="col-lg-3 col-md-6 mb-5">
+<h5 class="mb-4 text-white text-uppercase font-weight-bold">
+Danh mục
+</h5>
+<div class="m-n1">
+{{#each lcCategories}}
+<a
+href=""
+class="btn btn-sm btn-outline-secondary m-1"
+>{{this.Name}}</a>
+{{/each}}
+</div>
 
-        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-        Design by
-        <a href="https://htmlcodex.com">HTML Codex</a>
-      </p>
-    </div>
-    <!-- Footer End -->
-
-    {{!-- login modal --}}
-    <div
-  class="modal fade"
-  id="loginModal"
-  tabindex="-1"
-  aria-labelledby="loginModalLabel"
-  aria-hidden="true"
+</div>
+<div class="col-lg-3 col-md-6 mb-5">
+<h5 class="mb-4 text-white text-uppercase font-weight-bold">
+Get In Touch
+</h5>
+<p class="font-weight-medium">
+<i class="fa fa-map-marker-alt mr-2"></i>123 Street, New York, USA
+</p>
+<p class="font-weight-medium">
+<i class="fa fa-phone-alt mr-2"></i>+012 345 67890
+</p>
+<p class="font-weight-medium">
+<i class="fa fa-envelope mr-2"></i>info@example.com
+</p>
+<h6 class="mt-4 mb-3 text-white text-uppercase font-weight-bold">
+Follow Us
+</h6>
+<div class="d-flex justify-content-start">
+<a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i
+class="fab fa-twitter"
+></i></a>
+<a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i
+class="fab fa-facebook-f"
+></i></a>
+<a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i
+class="fab fa-linkedin-in"
+></i></a>
+<a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="#"><i
+class="fab fa-instagram"
+></i></a>
+<a class="btn btn-lg btn-secondary btn-lg-square" href="#"><i
+class="fab fa-youtube"
+></i></a>
+</div>
+</div>
+</div>
+</div>
+<div
+class="container-fluid py-4 px-sm-3 px-md-5"
+style="background: #111111"
 >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="loginModalLabel">Đăng nhập</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form
-          id="loginForm"
-          method="post"
-          enctype="multipart/form-data"
-        >
-          <div class="form-group mb-3">
-            <label
-              for="usernameLogin"
-              class="form-label font-weight-bold text-black"
-            >Tên đăng nhập</label>
-            <input
-              type="text"
-              class="form-control"
-              id="usernameLogin"
-              name="usernameLogin"
-              placeholder="Nhập tên danh mục"
-              required
-            />
-          </div>
-          <div class="form-group mb-3">
-            <label
-              for="passwordLogin"
-              class="form-label font-weight-bold text-black"
-            >Mật khẩu</label>
-            <input
-              type="password"
-              class="form-control"
-              id="passwordLogin"
-              name="passwordLogin"
-              placeholder="Nhập tên danh mục"
-              required
-            />
-          </div>
-          <div class="modal-footer">
-        <button
-          type="submit"
-          class="btn btn-primary"
-        >Đăng nhập</button>
-      </div>
-        </form>
-      </div>
-      
-    </div>
-  </div>
-    </div>
+<p class="m-0 text-center">
+&copy;
+<a href="#">Your Site Name</a>. All Rights Reserved.
 
-    {{!-- register modal --}}
-    <div
-  class="modal fade"
-  id="registerModal"
-  tabindex="-1"
-  aria-labelledby="registerModalLabel"
-  aria-hidden="true"
+<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+Design by
+<a href="https://htmlcodex.com">HTML Codex</a>
+</p>
+</div>
+<!-- Footer End -->
+
+{{!-- login modal --}}
+<div
+class="modal fade"
+id="loginModal"
+tabindex="-1"
+aria-labelledby="loginModalLabel"
+aria-hidden="true"
 >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="registerModalLabel">Đăng ký</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form
-          id="registerForm"
-          method="post"
-          enctype="multipart/form-data"
-        >
-          <div class="form-group mb-3">
-            <label
-              for="usernameRegister"
-              class="form-label font-weight-bold text-black"
-            >Tên đăng nhập</label>
-            <input
-              type="text"
-              class="form-control"
-              id="usernameRegister"
-              name="usernameRegister"
-              placeholder="Nhập tên đăng nhập"
-              required
-          />
-          </div>
-          <div class="form-group mb-3">
-            <label
-              for="passwordRegister"
-              class="form-label font-weight-bold text-black"
-            >Mật khẩu</label>
-            <input
-              type="password"
-              class="form-control"
-              id="passwordRegister"
-              name="passwordRegister"
-              placeholder="Nhập tên mật khẩu"
-              required
-            />
-          </div>
-           <div class="form-group mb-3">
-            <label
-              for="phoneNumber"
-              class="form-label font-weight-bold text-black"
-            >Số điện thoại</label>
-            <input
-              type="text"
-              class="form-control"
-              id="phoneNumber"
-              name="phoneNumber"
-              placeholder="Nhập số điện thoại"
-              required
-            />
-          </div>
-          <div class="form-group mb-3">
-            <label
-              for="name"
-              class="form-label font-weight-bold text-black"
-            >Tên người dùng</label>
-            <input
-              type="text"
-              class="form-control"
-              id="name"
-              name="name"
-              placeholder="Nhập tên người dùng"
-              required
-            />
-          </div>
-          <div class="form-group mb-3">
-            <label
-              for="dob"
-              class="form-label font-weight-bold text-black"
-            >Ngày sinh</label>
-            <input
-  type="date"
-  class="form-control"
-  id="dob"
-  name="dob"
-  placeholder="Nhập ngày sinh"
-  required
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="loginModalLabel">Đăng nhập</h5>
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="modal"
+aria-label="Close"
+></button>
+</div>
+<div class="modal-body">
+<form
+id="loginForm"
+method="post"
+enctype="multipart/form-data"
+>
+<div class="form-group mb-3">
+<label
+for="usernameLogin"
+class="form-label font-weight-bold text-black"
+>Tên đăng nhập</label>
+<input
+type="text"
+class="form-control"
+id="usernameLogin"
+name="usernameLogin"
+placeholder="Nhập tên danh mục"
+required
+/>
+</div>
+<div class="form-group mb-3">
+<label
+for="passwordLogin"
+class="form-label font-weight-bold text-black"
+>Mật khẩu</label>
+<input
+type="password"
+class="form-control"
+id="passwordLogin"
+name="passwordLogin"
+placeholder="Nhập tên danh mục"
+required
+/>
+</div>
+<div class="modal-footer">
+<button
+type="submit"
+class="btn btn-primary"
+>Đăng nhập</button>
+</div>
+</form>
+</div>
+
+</div>
+</div>
+</div>
+
+{{!-- register modal --}}
+<div
+class="modal fade"
+id="registerModal"
+tabindex="-1"
+aria-labelledby="registerModalLabel"
+aria-hidden="true"
+>
+<div class="modal-dialog">
+<div class="modal-content">
+<div class="modal-header">
+<h5 class="modal-title" id="registerModalLabel">Đăng ký</h5>
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="modal"
+aria-label="Close"
+></button>
+</div>
+<div class="modal-body">
+<form
+id="registerForm"
+method="post"
+enctype="multipart/form-data"
+>
+<div class="form-group mb-3">
+<label
+for="usernameRegister"
+class="form-label font-weight-bold text-black"
+>Tên đăng nhập</label>
+<input
+type="text"
+class="form-control"
+id="usernameRegister"
+name="usernameRegister"
+placeholder="Nhập tên đăng nhập"
+required
+/>
+</div>
+<div class="form-group mb-3">
+<label
+for="passwordRegister"
+class="form-label font-weight-bold text-black"
+>Mật khẩu</label>
+<input
+type="password"
+class="form-control"
+id="passwordRegister"
+name="passwordRegister"
+placeholder="Nhập tên mật khẩu"
+required
+/>
+</div>
+<div class="form-group mb-3">
+<label
+for="phoneNumber"
+class="form-label font-weight-bold text-black"
+>Số điện thoại</label>
+<input
+type="text"
+class="form-control"
+id="phoneNumber"
+name="phoneNumber"
+placeholder="Nhập số điện thoại"
+required
+/>
+</div>
+<div class="form-group mb-3">
+<label
+for="name"
+class="form-label font-weight-bold text-black"
+>Tên người dùng</label>
+<input
+type="text"
+class="form-control"
+id="name"
+name="name"
+placeholder="Nhập tên người dùng"
+required
+/>
+</div>
+<div class="form-group mb-3">
+<label
+for="dob"
+class="form-label font-weight-bold text-black"
+>Ngày sinh</label>
+<input
+type="date"
+class="form-control"
+id="dob"
+name="dob"
+placeholder="Nhập ngày sinh"
+required
 />
 
-          </div>
-          <div class="modal-footer">
-        <button
-          type="submit"
-          class="btn btn-primary"
-        >Đăng ký</button></div>
-        </form>
-      </div>
-      
-    </div>
-  </div>
-    </div>
+</div>
+<div class="modal-footer">
+<button
+type="submit"
+class="btn btn-primary"
+>Đăng ký</button></div>
+</form>
+</div>
 
-    <script>
-      document
-  .getElementById("registerForm")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
-    const username = document.getElementById("loginForm").value;
-    const password = document.getElementById("passwordRegister").value;
-    const phoneNumber = document.getElementById("phoneNumber").value;
-    const name = document.getElementById("name").value;
-    const dob = document.getElementById("dob").value;
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
-    formData.append("phoneNumber", phoneNumber);
-    formData.append("name", name);
-    formData.append("dob", dob);
+</div>
+</div>
+</div>
 
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+   <script>
+     document
+ .getElementById("registerForm")
+ .addEventListener("submit", function (e) {
+   e.preventDefault();
+   const username = document.getElementById("loginForm").value;
+   const password = document.getElementById("passwordRegister").value;
+   const phoneNumber = document.getElementById("phoneNumber").value;
+   const name = document.getElementById("name").value;
+   const dob = document.getElementById("dob").value;
+   const formData = new FormData();
+   formData.append("username", username);
+   formData.append("password", password);
+   formData.append("phoneNumber", phoneNumber);
+   formData.append("name", name);
+   formData.append("dob", dob);
 
-    fetch("/accountRouter/register", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        alert(data.message);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  });
+   for (let [key, value] of formData.entries()) {
+     console.log(`${key}: ${value}`);
+   }
 
-    document
-  .getElementById("loginForm")
-  .addEventListener("submit", function (e) {
-    e.preventDefault();
-    const username = document.getElementById("usernameLogin").value;
-    const password = document.getElementById("passwordLogin").value;
-    const formData = new FormData();
-    formData.append("username", username);
-    formData.append("password", password);
+   fetch("/accountRouter/register", {
+     method: "POST",
+     body: formData,
+   })
+     .then((response) => {
+       if (!response.ok) {
+         throw new Error("Network response was not ok " + response.statusText);
+       }
+       return response.json();
+     })
+     .then((data) => {
+       alert(data.message);
+     })
+     .catch((error) => {
+       console.error("Error:", error);
+     });
+ });
 
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+   document
+ .getElementById("loginForm")
+ .addEventListener("submit", function (e) {
+   e.preventDefault();
+   const username = document.getElementById("usernameLogin").value;
+   const password = document.getElementById("passwordLogin").value;
+   const formData = new FormData();
+   formData.append("username", username);
+   formData.append("password", password);
 
-    fetch("/accountRouter/login", {
-      method: "POST",
-      body: formData,
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        alert(data.message);
-        if (data.redirectUrl) {
-        window.location.href = data.redirectUrl; 
-      }
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  });
+   for (let [key, value] of formData.entries()) {
+     console.log(`${key}: ${value}`);
+   }
 
-   document.getElementById("logoutLink").addEventListener("click", function(e) {
-    e.preventDefault(); 
-    
-    fetch("/accountRouter/logout", {
-      method: "POST",
-    })
-    .then((response) => {
-      if (response.ok) {
-        window.location.href = "/"; 
-      } else {
-        console.error("Logout failed");
-        alert("Đã có lỗi xảy ra khi đăng xuất.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-      alert("Đã có lỗi xảy ra khi đăng xuất.");
-    });
-  });
-    </script>
+   fetch("/accountRouter/login", {
+     method: "POST",
+     body: formData,
+   })
+     .then((response) => {
+       if (!response.ok) {
+         throw new Error("Network response was not ok " + response.statusText);
+       }
+       return response.json();
+     })
+     .then((data) => {
+       alert(data.message);
+       if (data.redirectUrl) {
+       window.location.href = data.redirectUrl; 
+     }
+     })
+     .catch((error) => {
+       console.error("Error:", error);
+     });
+ });
 
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary btn-square back-to-top"><i
-        class="fa fa-arrow-up"
-      ></i></a>
+  document.getElementById("logoutLink").addEventListener("click", function(e) {
+   e.preventDefault(); 
+   
+   fetch("/accountRouter/logout", {
+     method: "POST",
+   })
+   .then((response) => {
+     if (response.ok) {
+       window.location.href = "/"; 
+     } else {
+       console.error("Logout failed");
+       alert("Đã có lỗi xảy ra khi đăng xuất.");
+     }
+   })
+   .catch((error) => {
+     console.error("Error:", error);
+     alert("Đã có lỗi xảy ra khi đăng xuất.");
+   });
+ });
+   </script>
 
-    <script>
-      var quill = new Quill("#articleContent", { theme: "snow", modules: {
-      toolbar: [ [{ header: [1, 2, 3, false] }], ["bold", "italic",
-      "underline"], ["link", "image"], [{ list: "ordered" }, { list: "bullet"
-      }], [{ align: [] }], ["clean"], ], }, }); var quillUpdateArticleContent =
-      new Quill("#updateArticleContent", { theme: "snow", modules: { toolbar: [
-      [{ header: [1, 2, 3, false] }], ["bold", "italic", "underline"], ["link",
-      "image"], [{ list: "ordered" }, { list: "bullet" }], [{ align: [] }],
-      ["clean"], ], }, });
-    </script>
+<!-- Back to Top -->
+<a href="#" class="btn btn-primary btn-square back-to-top"><i
+class="fa fa-arrow-up"
+></i></a>
 
-    <!-- JavaScript Libraries -->
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script
-      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
-    ></script>
-    <script src="../../static/lib/easing/easing.min.js"></script>
-    <script src="../../static/lib/owlcarousel/owl.carousel.min.js"></script>
+   <script>
+     var quill = new Quill("#articleContent", { theme: "snow", modules: {
+     toolbar: [ [{ header: [1, 2, 3, false] }], ["bold", "italic",
+     "underline"], ["link", "image"], [{ list: "ordered" }, { list: "bullet"
+     }], [{ align: [] }], ["clean"], ], }, }); var quillUpdateArticleContent =
+     new Quill("#updateArticleContent", { theme: "snow", modules: { toolbar: [
+     [{ header: [1, 2, 3, false] }], ["bold", "italic", "underline"], ["link",
+     "image"], [{ list: "ordered" }, { list: "bullet" }], [{ align: [] }],
+     ["clean"], ], }, });
+   </script>
 
-    {{! demo }}
-    <script src="../../views/adminPage/AdminCategoryManagement.js"></script>
+<!-- JavaScript Libraries -->
+   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+   <script
+     src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
+   ></script>
+   <script src="../../static/lib/easing/easing.min.js"></script>
+   <script src="../../static/lib/owlcarousel/owl.carousel.min.js"></script>
 
-    <!-- Template Javascript -->
-    <script src="../../static/js/effect.js"></script>
-    {{{_sections.js}}}
-  </body>
-</html>
+{{! demo }}
+   <script src="../../views/adminPage/AdminCategoryManagement.js"></script>
+
+<!-- Template Javascript -->
+   <script src="../../static/js/effect.js"></script>
+{{{_sections.js}}}
+</body>
