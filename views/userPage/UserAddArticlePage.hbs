@@ -22,8 +22,7 @@
       </div>
       <!-- Add Article Section -->
       <div class="col-12 col-sm-12 col-md-9 col-lg-9 article">
-        <form action="" method="post" enctype="multipart/form-data">
-          <!-- Article Image -->
+        <form id="addArticleByUserForm" action="" method="post" enctype="multipart/form-data">
           <div class="form-group mb-3">
             <label
               for="articleImage"
@@ -62,41 +61,32 @@
               >Tiêu đề bài viết</label
             >
             <select
-              class="form-select category-select"
-              aria-label="Default select example"
-            >
-              <option selected>Chọn danh mục của bài viết</option>
-              <option value="1">Kinh doanh</option>
-              <option value="2">Chính trị</option>
-              <option value="3">Văn hóa</option>
-            </select>
+  class="form-select category-select"
+  id="category_id"
+  name="category_id"
+  aria-label="Default select example"
+  required
+>
+  <option selected disabled>Chọn danh mục của bài viết</option>
+  {{#each categories}}
+  <option value="{{this.id}}">{{this.Name}}</option>
+  {{/each}}
+</select>
           </div>
 
           <!-- tags -->
-          <div class="form-group mb-3">
-            <div class="d-flex justify-content-between">
-              <label for="" class="form-label font-weight-bold text-black"
-                >Tags</label
-              >
-              <button type="" class="btn btn-primary font-weight-bold px-4">
-                Thêm tags
-              </button>
-            </div>
-            <div>
-              <div class="addedTag">
-                Kinh tế
-                <span class="close-btn">&times;</span>
-              </div>
-              <div class="addedTag">
-                Chính trị
-                <span class="close-btn">&times;</span>
-              </div>
-              <div class="addedTag">
-                Văn Hóa
-                <span class="close-btn">&times;</span>
-              </div>
-            </div>
-          </div>
+          <div class="form-group mb-3 text-black">
+  <div class="d-flex justify-content-between">
+    <label for="tags" class="form-label font-weight-bold text-black">Tags</label>
+    <select id="tagSelect" class="form-select" aria-label="Chọn tag">
+      <option selected disabled>Chọn một tag</option>
+      {{#each tags}}
+      <option value="{{this.id}}">{{this.name}}</option>
+      {{/each}}
+    </select>
+  </div>
+  <div id="selectedTags" class="mt-2"></div>
+</div>
 
           <!-- Article Content -->
           <div class="form-group mb-4">
@@ -108,7 +98,7 @@
               style="height: 400px; background: #fff"
             ></div>
           </div>
-
+          <input type="hidden" id="userId" value="{{authUser.id}}"/>
           <!-- Submit Button -->
           <div class="d-flex justify-content-end">
             <button type="submit" class="btn btn-primary font-weight-bold px-4">
@@ -120,3 +110,73 @@
     </div>
   </div>
 </div>
+
+<script>
+  document.getElementById("tagSelect").addEventListener("change", function () {
+  const selectedTagId = this.value;
+  const selectedTagName = this.options[this.selectedIndex].text;
+
+  const existingTag = document.querySelector(
+    `#selectedTags .addedTag[data-id="${selectedTagId}"]`
+  );
+  if (existingTag) {
+    alert("Tag này đã được thêm!");
+    return;
+  }
+
+  const tagDiv = document.createElement("div");
+  tagDiv.className = "addedTag";
+  tagDiv.setAttribute("data-id", selectedTagId);
+  tagDiv.innerHTML = `
+      ${selectedTagName}
+      <span class="close-btn">&times;</span>
+    `;
+
+  document.getElementById("selectedTags").appendChild(tagDiv);
+  tagDiv.querySelector(".close-btn").addEventListener("click", function () {
+    tagDiv.remove();
+  });
+  this.value = "";
+});
+document.getElementById("addArticleByUserForm").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const title = document.getElementById("articleTitle").value;
+  const quillContent = document.getElementById("articleContent");
+  const description = quillContent ? quillContent.querySelector(".ql-editor").innerHTML : "";
+  const categoryId = document.getElementById("category_id").value;
+  const userId = document.getElementById("userId").value;
+
+  const tagIds = [];
+  document
+    .querySelectorAll("#selectedTags .addedTag")
+    .forEach(function (tagDiv) {
+      tagIds.push(tagDiv.getAttribute("data-id"));
+    });
+
+  const articleImage = document.getElementById("articleImage").files[0];
+  const formData = new FormData();
+  formData.append("title", title);
+  formData.append("description", description); 
+  formData.append("category_id", categoryId);
+  formData.append("tags", JSON.stringify(tagIds));
+  formData.append("userId", userId);
+
+  if (articleImage) {
+    formData.append("image", articleImage);
+  }
+
+  fetch("/articleRouter/addArticle", {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      alert(data.message);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+});
+
+</script>
