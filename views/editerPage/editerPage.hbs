@@ -1,3 +1,4 @@
+@@ -0,0 +1,234 @@
 <div class="container-fluid pt-5">
   <div class="container">
     <table class="table-custom">
@@ -43,14 +44,17 @@
 >
     Duyệt
 </button>
+
         </tr>
         {{/each}}
     </tbody>
 </table>
 </div>
 </div>
+
 {{!-- read modal --}}
 <div></div>
+
 {{!-- reject modal --}}
 <div
   class="modal fade"
@@ -89,6 +93,7 @@
               required
             />
           </div>
+
           <!-- Submit Button -->
           <div class="d-flex justify-content-end">
             <button type="submit" class="btn btn-primary font-weight-bold px-4">
@@ -100,6 +105,8 @@
     </div>
   </div>
 </div>
+
+
 {{!-- accepted modal --}}
 <div
   class="modal fade"
@@ -143,8 +150,11 @@
     </div>
   </div>
 </div>
+
+
 <script>
     {{!-- reject --}}
+
 async function rejectArticle(articleId) {
   try {
     const response = await fetch(`/articleRouter/${articleId}`);
@@ -157,22 +167,27 @@ async function rejectArticle(articleId) {
     alert("Không thể mở modal cập nhật bài viết!");
   }
 }
+
     document
   .getElementById("rejectArticleForm")
   .addEventListener("submit", async function (e) {
     e.preventDefault();
+
     const articleId = document.getElementById("articleId").value;
     const userId = document.getElementById("userId").value;
     const description = document.getElementById("description").value;
+
     const formData = new FormData();
     formData.append("articleId", articleId);
     formData.append("userId", userId)
     formData.append("description", description);
+
     try {
       const response = await fetch("/articleRouter/rejectArticle", {
         method: "POST",
         body: formData,
       });
+
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
@@ -185,14 +200,17 @@ async function rejectArticle(articleId) {
       alert("Không thể cập nhật bài viết!");
     }
   });
+
   // Delete article
 function acceptedArticle(articleId, userId) {
   document.getElementById("acceptedArticleId").textContent = articleId;
+
   const confirmAcceptedButton = document.getElementById("confirmAcceptedButton");
   confirmAcceptedButton.onclick = function () {
     acceptedButton(articleId, userId);
   };
 }
+
 function acceptedButton(articleId, userId) {
   console.log(`Article ID: ${articleId}, User ID: ${userId}`);
   fetch(`/articleRouter/acceptedArticle/${articleId}/${userId}`, {
@@ -213,4 +231,5 @@ function acceptedButton(articleId, userId) {
       alert(error.message || "Có lỗi xảy ra, vui lòng thử lại!");
     });
 }
+
 </script>
