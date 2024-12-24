@@ -19,7 +19,7 @@ import articleRouter from "./routes/article.route.js";
 import categoryRouter from "./routes/category.route.js";
 import tagRouter from "./routes/tag.route.js";
 import accountRouter from "./routes/account.route.js";
-// import { isAuth, isAdmin } from "./middlewares/auth.mdw.js";
+import { isAuth, isAdmin } from "./middlewares/auth.mdw.js";
 const app = express();
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -145,6 +145,8 @@ app.get("/", async (req, res) => {
       section3Articles,
       section4Articles,
       categories,
+      isLoggedIn: req.session.auth || false,
+      authUser: req.session.authUser || null,
     });
   } catch (error) {
     console.error(error);
@@ -210,7 +212,7 @@ app.get("/nguoidung/thembaiviet", (req, res) => {
 });
 
 app.get("/nguoidung/danhsachbaiviet", (req, res) => {
-  res.render("userPage/UserArticleListePage");
+  res.render("userPage/UserArticleListPage");
 });
 
 app.get("/nguoidung/thongtin", (req, res) => {
