@@ -1,0 +1,216 @@
+<div class="container-fluid pt-5">
+  <div class="container">
+    <table class="table-custom">
+      <input type="hidden" id="userIdForAcceptedArticle" value="{{authUser.id}}" />
+    <thead>
+        <tr>
+            <th class="text-black">ID</th>
+            <th class="text-black">Ảnh</th>
+            <th class="text-black">Tiêu đề</th>
+            <th class="text-black">Ngày đăng</th>
+            <th class="text-black">Trạng thái</th>
+            <th class="text-black">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each articles}}
+        <tr>
+            <td>{{this.articleId}}</td>
+            <td>
+                <img src="data:image/jpeg;base64,{{this.img}}" alt="Article Image" style="width: 100px; height: auto;" />
+            </td>
+            <td>{{this.title}}</td>
+            <td>{{formatDate this.publishedDay}}</td>
+            <td>
+                <span class="status-badge 
+                    {{#if (eq this.status 'Từ chối')}}status-rejected{{/if}}
+                    {{#if (eq this.status 'Đang duyệt')}}status-pending{{/if}}
+                    {{#if (eq this.status 'Đã duyệt')}}status-approved{{/if}}
+                ">
+                    {{this.status}}
+                </span>
+            </td>
+            <td class="action-buttons">
+                <button class="btn btn-sm btn-primary" onclick="readArticle('{{this.articleId}}')">Xem</button>
+                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" 
+                    data-bs-target="#rejectArticleModal" onclick="rejectArticle('{{this.articleId}}')">Từ chối</button>
+                
+<button 
+    class="btn btn-sm btn-secondary" 
+    data-bs-toggle="modal" 
+    data-bs-target="#acceptedArticle"
+    onclick="acceptedArticle('{{this.articleId}}', document.getElementById('userIdForAcceptedArticle').value)"
+>
+    Duyệt
+</button>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+</div>
+</div>
+{{!-- read modal --}}
+<div></div>
+{{!-- reject modal --}}
+<div
+  class="modal fade"
+  id="rejectArticleModal"
+  tabindex="-1"
+  aria-labelledby="rejectArticleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="rejectArticleModalLabel">Từ chối duyệt bài viết</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form id="rejectArticleForm" method="post" enctype="multipart/form-data">
+          <!-- Reject ression -->
+          <input type="hidden" id="articleId" />
+          <input type="hidden" id="userId" value="{{authUser.id}}"/>
+          <div class="form-group mb-3">
+            <label
+              for="description"
+              class="form-label font-weight-bold text-black"
+              >Lí do từ chối</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="description"
+              name="description"
+              required
+            />
+          </div>
+          <!-- Submit Button -->
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-primary font-weight-bold px-4">
+              Gửi lí do từ chối
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{!-- accepted modal --}}
+<div
+  class="modal fade"
+  id="acceptedArticle"
+  tabindex="-1"
+  aria-labelledby="acceptedArticleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="acceptedArticleModalLabel">
+          Duyệt bài viết
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn duyệt bài viết với ID: <span id="acceptedArticleId"></span>?</p>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Hủy
+        </button>
+        <button
+          id="confirmAcceptedButton"
+          type="button"
+          class="btn btn-primary"
+        >
+          Xác nhận
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    {{!-- reject --}}
+async function rejectArticle(articleId) {
+  try {
+    const response = await fetch(`/articleRouter/${articleId}`);
+    if (!response.ok) {
+      throw new Error("Không thể lấy dữ liệu bài viết");
+    }
+    document.getElementById("articleId").value = articleId;
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu bài viết:", error);
+    alert("Không thể mở modal cập nhật bài viết!");
+  }
+}
+    document
+  .getElementById("rejectArticleForm")
+  .addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const articleId = document.getElementById("articleId").value;
+    const userId = document.getElementById("userId").value;
+    const description = document.getElementById("description").value;
+    const formData = new FormData();
+    formData.append("articleId", articleId);
+    formData.append("userId", userId)
+    formData.append("description", description);
+    try {
+      const response = await fetch("/articleRouter/rejectArticle", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.message);
+        location.reload();
+      } else {
+        throw new Error(data.message || "Lỗi không xác định");
+      }
+    } catch (error) {
+      console.error("Error updating article:", error);
+      alert("Không thể cập nhật bài viết!");
+    }
+  });
+  // Delete article
+function acceptedArticle(articleId, userId) {
+  document.getElementById("acceptedArticleId").textContent = articleId;
+  const confirmAcceptedButton = document.getElementById("confirmAcceptedButton");
+  confirmAcceptedButton.onclick = function () {
+    acceptedButton(articleId, userId);
+  };
+}
+function acceptedButton(articleId, userId) {
+  console.log(`Article ID: ${articleId}, User ID: ${userId}`);
+  fetch(`/articleRouter/acceptedArticle/${articleId}/${userId}`, {
+    method: "POST",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Có lỗi xảy ra, vui lòng thử lại!");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      alert(data.message || "Duyệt bài viết thành công!");
+      location.reload();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert(error.message || "Có lỗi xảy ra, vui lòng thử lại!");
+    });
+}
+</script>
