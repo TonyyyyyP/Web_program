@@ -68,15 +68,31 @@
                 <a class="nav-link text-body small" href="#">Monday, January 1,
                   2045</a>
               </li>
-              <li class="nav-item border-right border-secondary">
-                <a class="nav-link text-body small" href="#">Quảng cáo</a>
-              </li>
-              <li class="nav-item border-right border-secondary">
-                <a class="nav-link text-body small" href="#">Liên lạc</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link text-body small" href="#">Đăng nhập</a>
-              </li>
+              {{#if isLoggedIn}}
+    <li class="nav-item">
+      <div class="nav-link text-body small">
+        Chào, {{authUser.username}}
+      </div>
+    </li>
+    <li class="nav-item">
+      <form id="logoutForm" method="POST" style="display: none;">
+  <button type="submit" id="logoutButton">Đăng xuất</button>
+</form>
+
+<div class="nav-link text-body small cursor-pointer" id="logoutLink">Đăng xuất</div>
+    </li>
+  {{else}}
+    <li class="nav-item border-right border-secondary">
+      <div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#registerModal">
+        Đăng ký
+      </div>
+    </li>
+    <li class="nav-item">
+      <div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#loginModal">
+        Đăng nhập
+      </div>
+    </li>
+  {{/if}}
             </ul>
           </nav>
         </div>
@@ -183,6 +199,22 @@
               </button>
             </div>
           </div>
+        <div class="nav-item dropdown">
+              <a
+                href="#"
+                class="nav-link"
+                data-toggle="dropdown"
+              >
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+  <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+  <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+</svg>
+              </a>
+              <div class="dropdown-menu rounded-0 m-0">
+                <a href="/nguoidung/thongtin" class="dropdown-item">Tài khoản</a>
+              </div>
+            </div>
+
         </div>
       </nav>
     </div>
@@ -307,6 +339,275 @@
     </div>
     <!-- Footer End -->
 
+    {{!-- login modal --}}
+    <div
+  class="modal fade"
+  id="loginModal"
+  tabindex="-1"
+  aria-labelledby="loginModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="loginModalLabel">Đăng nhập</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          id="loginForm"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group mb-3">
+            <label
+              for="usernameLogin"
+              class="form-label font-weight-bold text-black"
+            >Tên đăng nhập</label>
+            <input
+              type="text"
+              class="form-control"
+              id="usernameLogin"
+              name="usernameLogin"
+              placeholder="Nhập tên danh mục"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label
+              for="passwordLogin"
+              class="form-label font-weight-bold text-black"
+            >Mật khẩu</label>
+            <input
+              type="password"
+              class="form-control"
+              id="passwordLogin"
+              name="passwordLogin"
+              placeholder="Nhập tên danh mục"
+              required
+            />
+          </div>
+          <div class="modal-footer">
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >Đăng nhập</button>
+      </div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+    </div>
+
+    {{!-- register modal --}}
+    <div
+  class="modal fade"
+  id="registerModal"
+  tabindex="-1"
+  aria-labelledby="registerModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="registerModalLabel">Đăng ký</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          id="registerForm"
+          method="post"
+          enctype="multipart/form-data"
+        >
+          <div class="form-group mb-3">
+            <label
+              for="usernameRegister"
+              class="form-label font-weight-bold text-black"
+            >Tên đăng nhập</label>
+            <input
+              type="text"
+              class="form-control"
+              id="usernameRegister"
+              name="usernameRegister"
+              placeholder="Nhập tên đăng nhập"
+              required
+          />
+          </div>
+          <div class="form-group mb-3">
+            <label
+              for="passwordRegister"
+              class="form-label font-weight-bold text-black"
+            >Mật khẩu</label>
+            <input
+              type="password"
+              class="form-control"
+              id="passwordRegister"
+              name="passwordRegister"
+              placeholder="Nhập tên mật khẩu"
+              required
+            />
+          </div>
+           <div class="form-group mb-3">
+            <label
+              for="phoneNumber"
+              class="form-label font-weight-bold text-black"
+            >Số điện thoại</label>
+            <input
+              type="text"
+              class="form-control"
+              id="phoneNumber"
+              name="phoneNumber"
+              placeholder="Nhập số điện thoại"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label
+              for="name"
+              class="form-label font-weight-bold text-black"
+            >Tên người dùng</label>
+            <input
+              type="text"
+              class="form-control"
+              id="name"
+              name="name"
+              placeholder="Nhập tên người dùng"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label
+              for="dob"
+              class="form-label font-weight-bold text-black"
+            >Ngày sinh</label>
+            <input
+  type="date"
+  class="form-control"
+  id="dob"
+  name="dob"
+  placeholder="Nhập ngày sinh"
+  required
+/>
+
+          </div>
+          <div class="modal-footer">
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >Đăng ký</button></div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+    </div>
+
+    <script>
+      document
+  .getElementById("registerForm")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("loginForm").value;
+    const password = document.getElementById("passwordRegister").value;
+    const phoneNumber = document.getElementById("phoneNumber").value;
+    const name = document.getElementById("name").value;
+    const dob = document.getElementById("dob").value;
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("name", name);
+    formData.append("dob", dob);
+
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    fetch("/accountRouter/register", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert(data.message);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+
+    document
+  .getElementById("loginForm")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("usernameLogin").value;
+    const password = document.getElementById("passwordLogin").value;
+    const formData = new FormData();
+    formData.append("username", username);
+    formData.append("password", password);
+
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    fetch("/accountRouter/login", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert(data.message);
+        if (data.redirectUrl) {
+        window.location.href = data.redirectUrl; 
+      }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+
+   document.getElementById("logoutLink").addEventListener("click", function(e) {
+    e.preventDefault(); 
+    
+    fetch("/accountRouter/logout", {
+      method: "POST",
+    })
+    .then((response) => {
+      if (response.ok) {
+        window.location.href = "/"; 
+      } else {
+        console.error("Logout failed");
+        alert("Đã có lỗi xảy ra khi đăng xuất.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Đã có lỗi xảy ra khi đăng xuất.");
+    });
+  });
+    </script>
+
     <!-- Back to Top -->
     <a href="#" class="btn btn-primary btn-square back-to-top"><i
         class="fa fa-arrow-up"
@@ -316,7 +617,11 @@
       var quill = new Quill("#articleContent", { theme: "snow", modules: {
       toolbar: [ [{ header: [1, 2, 3, false] }], ["bold", "italic",
       "underline"], ["link", "image"], [{ list: "ordered" }, { list: "bullet"
-      }], [{ align: [] }], ["clean"], ], }, });
+      }], [{ align: [] }], ["clean"], ], }, }); var quillUpdateArticleContent =
+      new Quill("#updateArticleContent", { theme: "snow", modules: { toolbar: [
+      [{ header: [1, 2, 3, false] }], ["bold", "italic", "underline"], ["link",
+      "image"], [{ list: "ordered" }, { list: "bullet" }], [{ align: [] }],
+      ["clean"], ], }, });
     </script>
 
     <!-- JavaScript Libraries -->
@@ -326,6 +631,9 @@
     ></script>
     <script src="../../static/lib/easing/easing.min.js"></script>
     <script src="../../static/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    {{! demo }}
+    <script src="../../views/adminPage/AdminCategoryManagement.js"></script>
 
     <!-- Template Javascript -->
     <script src="../../static/js/effect.js"></script>
