@@ -17,6 +17,7 @@ export default {
           "article.img",
           "article.description",
           "article.publishedDay",
+          "article.abstract",
           "category.id as categoryId",
           "category.name as categoryName",
           db.raw("GROUP_CONCAT(Tag.id) as tagIds"),
@@ -29,6 +30,7 @@ export default {
           "article.img",
           "article.description",
           "article.publishedDay",
+          "article.abstract",
           "category.id",
           "category.name"
         )
@@ -44,6 +46,7 @@ export default {
         img: article.img,
         description: article.description,
         publishedDay: article.publishedDay,
+        abstract: article.abstract,
         category: {
           id: article.categoryId,
           name: article.categoryName,
@@ -70,6 +73,7 @@ export default {
       category_id: newArticle.category_id,
       user_id: newArticle.user_id,
       premium: newArticle.premium,
+      abstract: newArticle.abstract,
     });
 
     return result[0];
@@ -265,9 +269,9 @@ export default {
             a.publishedDay,
             c.Name AS categoryName,
             CASE
-                WHEN f.description IS NOT NULL THEN 'Từ chối'
-                WHEN f.accepted IS NOT NULL THEN 'Đã duyệt'
-                ELSE 'Đang duyệt'
+                WHEN f.description IS NOT NULL AND f.accepted IS NULL THEN 'Từ chối' 
+       WHEN f.accepted IS NOT NULL THEN 'Đã duyệt' 
+       ELSE 'Đang duyệt'
             END AS status
         FROM article a
         LEFT JOIN faultfinding f ON a.id = f.article_id
@@ -320,32 +324,36 @@ export default {
     };
   },
 
-  async getArticlesForEditer() {
-    const articles = await db.raw(
-      `
-    SELECT
-   a.id AS articleId,
-   a.title,
-   a.img,
-   a.publishedDay,
-   a.premium,
-   c.Name AS categoryName,
-   CASE
-       WHEN f.description IS NOT NULL AND f.accepted IS NULL THEN 'Từ chối'  -- Khi đã có mô tả và chưa duyệt
-       WHEN f.accepted IS NOT NULL THEN 'Đã duyệt'  -- Khi đã duyệt
-       ELSE 'Đang duyệt'  -- Khi chưa có bất kỳ quyết định nào
-   END AS status
-FROM article a
-LEFT JOIN faultfinding f ON a.id = f.article_id
-LEFT JOIN category c ON a.category_id = c.id
-ORDER BY a.publishedDay DESC
+  async getArticlesForEditer(userId) {
+  const articles = await db.raw(
     `
-    );
+    SELECT
+        a.id AS articleId,
+        a.title,
+        a.img,
+        a.publishedDay,
+        a.premium,
+        c.Name AS categoryName,
+        CASE
+            WHEN f.description IS NOT NULL AND f.accepted IS NULL THEN 'Từ chối' 
+            WHEN f.accepted IS NOT NULL THEN 'Đã duyệt' 
+            ELSE 'Đang duyệt'  
+        END AS status
+    FROM article a
+    LEFT JOIN faultfinding f ON a.id = f.article_id
+    LEFT JOIN category c ON a.category_id = c.id
+    INNER JOIN user u ON u.managed_category_id = a.category_id
+    WHERE u.id = ?
+    ORDER BY a.publishedDay DESC
+    `,
+    [userId]
+  );
 
-    return {
-      articles: articles[0],
-    };
-  },
+  return {
+    articles: articles[0],
+  };
+},
+
 
   async getArticleByKeyword(keyword) {
     const query = `
