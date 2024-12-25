@@ -1,0 +1,123 @@
+<div class="container-fluid pt-5">
+  <div class="container">
+    <div class="row">
+      <!-- SideBar -->
+      <div class="col-12 col-sm-12 col-md-3 col-lg-3 sideBar">
+        <div>
+          <div class="heading">Quản lý website</div>
+          <div class="py-2 pl-2">
+            <a href="/quantrivien/quanlydanhmuc"><div
+                class="pb-2 cursor-pointer"
+              >Quản lý danh mục</div></a>
+            <a href="/quantrivien/quanlytag"><div
+                class="pb-2 cursor-pointer"
+              >Quản lý tag</div></a>
+            <a href="/quantrivien/quanlybaibao"><div
+                class="pb-2 cursor-pointer"
+              >Quản lý bài viết</div></a>
+          </div>
+        </div>
+        <div>
+          <div class="heading">Quản lý người dùng</div>
+          <div class="py-2 pl-2">
+            <a href="/quantrivien/quanlynguoidung"><div
+                class="pb-2 cursor-pointer"
+              >Người dùng</div></a>
+             <a href="/quantrivien/quanlyPremium"><div
+                class="pb-2 cursor-pointer select"
+              >Gia hạn Premium</div></a>
+          </div>
+        </div>
+      </div>
+      <!-- Add categiry managemet Section -->
+      <div class="col-12 col-sm-12 col-md-9 col-lg-9">
+        
+        
+        <div>
+          <table class="table-custom table">
+  <thead>
+    <tr>
+      <th class="text-black">ID Người Dùng</th>
+      <th class="text-black">Tên Người Dùng</th>
+      <th class="text-black">Hành Động</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{#each premium_extension_request}}
+      <tr>
+        <td>{{this.userId}}</td>
+        <td>{{this.userName}}</td>
+        <td class="action-buttons">
+          <button
+  class="btn btn-sm btn-primary"
+  data-bs-toggle="modal"
+  data-bs-target="#extendPremiumModal"
+  onclick="openExtendPremiumModal('{{this.requestId}}')"
+>
+  Duyệt
+</button>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+  class="modal fade"
+  id="extendPremiumModal"
+  tabindex="-1"
+  aria-labelledby="extendPremiumModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="extendPremiumModalLabel">Gia hạn người dùng</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <p>Bạn có chắc chắn muốn gia hạn Premium cho người dùng viết với ID đơn xin gia hạn là: <span id="extendPremiumId" class="fw-bold text-danger"></span>?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" id="confirmButton" class="btn btn-primary">Duyệt</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    function openExtendPremiumModal(id) {
+  document.getElementById("extendPremiumId").textContent = id;
+  const confirmButton = document.getElementById("confirmButton");
+  confirmButton.onclick = function () {
+    extendPremium(id);
+  };
+}
+
+function extendPremium(id) {
+    console.log(id)
+  fetch(`/accountRouter/extendPremium/${id}`, {
+    method: "POST",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      alert(data.message || "Xóa bài viết thành công!");
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      alert("Có lỗi xảy ra, vui lòng thử lại!");
+    });
+}
+</script>

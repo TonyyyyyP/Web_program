@@ -16,28 +16,15 @@
           <div class="heading">Quản lý người dùng</div>
           <div class="py-2 pl-2">
             <a href="/quantrivien/quanlynguoidung"><div class="pb-2 cursor-pointer">Người dùng</div></a>
+            <a href="/quantrivien/quanlyPremium"><div
+                class="pb-2 cursor-pointer"
+              >Gia hạn Premium</div></a>
           </div>
         </div>
       </div>
       <!-- Add categiry managemet Section -->
       <div class="col-12 col-sm-12 col-md-9 col-lg-9">
-        <div>
-          <div class="text-black mb-3">Tìm kiếm bài viết:</div>
-          <div class="input-group" style="width: 100%; max-width: 300px">
-            <input
-              type="text"
-              class="form-control border-0"
-              placeholder="Từ khóa"
-            />
-            <div class="input-group-append">
-              <button
-                class="input-group-text bg-primary text-dark border-0 px-3"
-              >
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-          </div>
-        </div>
+       
         <div class="mt-4 mb-3 d-flex justify-content-end">
           <button class="btn btn-primary font-weight-bold px-3" data-bs-toggle="modal"
     data-bs-target="#addArticleModal">
@@ -144,7 +131,7 @@
         ></button>
       </div>
       <div class="modal-body">
-        <form action="" method="post" enctype="multipart/form-data">
+        <form id="addArticleForm" action="" method="post" enctype="multipart/form-data">
         <input type="hidden" id="userId" value="{{authUser.id}}"/>
           <!-- Article Image -->
           <div class="form-group mb-3">
@@ -447,7 +434,7 @@ document.getElementById("tagSelect").addEventListener("change", function () {
   });
   this.value = "";
 });
-document.querySelector("form").addEventListener("submit", function (e) {
+document.getElementById("addArticleForm").addEventListener("submit", function (e) {
   e.preventDefault();
 
   const title = document.getElementById("articleTitle").value;
