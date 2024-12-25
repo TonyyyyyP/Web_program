@@ -9,6 +9,7 @@
             <th class="text-black">Tiêu đề</th>
             <th class="text-black">Ngày đăng</th>
             <th class="text-black">Trạng thái</th>
+            <th class="text-black">Premium</th> 
             <th class="text-black">Hành động</th>
         </tr>
     </thead>
@@ -29,6 +30,13 @@
                 ">
                     {{this.status}}
                 </span>
+            </td>
+             <td class="text-center">
+                {{#if this.premium}}
+                    Có
+                {{else}}
+                    Không
+                {{/if}}
             </td>
             <td class="action-buttons">
                 <button class="btn btn-sm btn-primary" onclick="readArticle('{{this.articleId}}')">Xem</button>
@@ -126,8 +134,10 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body text-black">
         <p>Bạn có chắc chắn muốn duyệt bài viết với ID: <span id="acceptedArticleId"></span>?</p>
+        <label for="articlePublishTime">Chọn ngày giờ đăng bài:</label>
+        <input type="datetime-local" id="articlePublishTime" class="form-control" required/>
       </div>
       <div class="modal-footer">
         <button
@@ -205,14 +215,18 @@ function acceptedArticle(articleId, userId) {
 
   const confirmAcceptedButton = document.getElementById("confirmAcceptedButton");
   confirmAcceptedButton.onclick = function () {
-    acceptedButton(articleId, userId);
+    const publishTime = document.getElementById("articlePublishTime").value;  
+    acceptedButton(articleId, userId, publishTime);
   };
 }
 
-function acceptedButton(articleId, userId) {
-  console.log(`Article ID: ${articleId}, User ID: ${userId}`);
+function acceptedButton(articleId, userId, publishTime) {
+  console.log(`Article ID: ${articleId}, User ID: ${userId}, Publish Time: ${publishTime}`);
+  const formDate = new FormData();
+  formDate.append("publishTime", publishTime)
   fetch(`/articleRouter/acceptedArticle/${articleId}/${userId}`, {
     method: "POST",
+    body: formDate,
   })
     .then((response) => {
       if (!response.ok) {
@@ -229,5 +243,6 @@ function acceptedButton(articleId, userId) {
       alert(error.message || "Có lỗi xảy ra, vui lòng thử lại!");
     });
 }
+
 
 </script>
