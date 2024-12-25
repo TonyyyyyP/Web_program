@@ -180,6 +180,19 @@
             />
           </div>
 
+          <div class="form-group mb-3">
+  <label for="updatePremiumExpiryDate" class="form-label font-weight-bold text-black">
+    Ngày hết hạn Premium
+  </label>
+  <input
+    type="datetime-local"
+    class="form-control"
+    id="updatePremiumExpiryDate"
+    name="updatePremiumExpiryDate"
+    placeholder="Nhập ngày hết hạn Premium"
+  />
+</div>
+
           <div class="d-flex justify-content-end">
             <button
               type="submit"
@@ -243,6 +256,11 @@ async function openUpdateUserModal(id) {
     document.getElementById("updateName").value = user.name;
     document.getElementById("updatePhoneNumber").value = user.phoneNumber;
     document.getElementById("updatePermission").value = user.permission;
+    document.getElementById("updatePremiumExpiryDate").value =
+  user.premium_expiry_date
+    ? new Date(user.premium_expiry_date).toISOString().slice(0, 16)
+    : ""; 
+
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu danh mục:", error);
     alert("Không thể mở modal cập nhật danh mục!");
@@ -259,6 +277,7 @@ document
     const name = document.getElementById("updateName").value;
     const phoneNumber = document.getElementById("updatePhoneNumber").value;
     const permission = document.getElementById("updatePermission").value;
+    const premiumExpiryDate = document.getElementById("updatePremiumExpiryDate").value;
 
     const formData = new FormData();
     formData.append("id", id);
@@ -266,6 +285,7 @@ document
     formData.append("name", name);
     formData.append("phoneNumber", phoneNumber);
     formData.append("permission", permission);
+    formData.append("premium_expiry_date", premiumExpiryDate);
 
     fetch("/accountRouter/update", {
       method: "POST",
