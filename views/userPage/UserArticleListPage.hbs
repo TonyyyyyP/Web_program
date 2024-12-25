@@ -53,7 +53,7 @@
             </td>
             <td class="action-buttons">
                 <!-- Nút "Xem" luôn hiển thị -->
-                <button class="btn btn-sm btn-primary" onclick="viewArticle('{{this.articleId}}')">Xem</button>
+                <a href="/baibao/{{this.articleId}}"> <button class="btn btn-sm btn-primary" onclick="viewArticle('{{this.articleId}}')">Xem</button> </a>
 
                 <!-- Hiển thị thêm nút "Lý do bị từ chối" và "Chỉnh sửa" nếu trạng thái là "Từ chối" -->
                 {{#if (eq this.status 'Từ chối')}}
