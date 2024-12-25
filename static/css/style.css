@@ -10819,6 +10819,14 @@ h6,
   border-color: #FFCC00;
 }
 
+.limit-2-lines {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .overlay {
   position: absolute;
   width: 100%;
