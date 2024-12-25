@@ -196,7 +196,7 @@
                           }}</small></a>
                     </div>
                     <a
-                      class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold"
+                      class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold limit-2-lines"
                       href="/baibao/{{articleId}}"
                     >{{title}}</a>
                     <p class="m-0 limit-2-lines">
@@ -209,7 +209,7 @@
                     <div class="d-flex align-items-center">
                       <img
                         class="rounded-circle mr-2"
-                        src="../../static/img/user.jpg"
+                        src="data:image/jpeg;base64,{{userImg}}"
                         width="25"
                         height="25"
                         alt=""
@@ -240,6 +240,7 @@
                   class="img-fluid"
                   src="data:image/jpeg;base64,{{section2Articles.0.img}}"
                   alt=""
+                  style="width: 130px; height: 100%; object-fit: cover;"
                 />
                 <div
                   class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
@@ -269,6 +270,7 @@
                   class="img-fluid"
                   src="data:image/jpeg;base64,{{section2Articles.1.img}}"
                   alt=""
+                  style="width: 130px; height: 100%; object-fit: cover;"
                 />
                 <div
                   class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
@@ -300,6 +302,7 @@
                   class="img-fluid"
                   src="data:image/jpeg;base64,{{section2Articles.2.img}}"
                   alt=""
+                  style="width: 130px; height: 100%; object-fit: cover;"
                 />
                 <div
                   class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0 overflow-hidden"
@@ -329,6 +332,7 @@
                   class="img-fluid"
                   src="data:image/jpeg;base64,{{section2Articles.3.img}}"
                   alt=""
+                  style="width: 130px; height: 100%; object-fit: cover;"
                 />
                 <div
                   class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0 overflow-hidden"
@@ -386,7 +390,7 @@
                     <div class="d-flex align-items-center">
                       <img
                         class="rounded-circle mr-2"
-                        src="../../static/img/user.jpg"
+                        src="data:image/jpeg;base64,{{userImg}}"
                         width="25"
                         height="25"
                         alt=""
@@ -417,6 +421,7 @@
                   class="img-fluid"
                   src="data:image/jpeg;base64,{{section4Articles.0.img}}"
                   alt=""
+                  style="width: 130px; height: 100%; object-fit: cover;"
                 />
                 <div
                   class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
@@ -446,6 +451,7 @@
                   class="img-fluid"
                   src="data:image/jpeg;base64,{{section4Articles.1.img}}"
                   alt=""
+                  style="width: 130px; height: 100%; object-fit: cover;"
                 />
                 <div
                   class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0"
@@ -562,10 +568,10 @@
                           }}</small></a>
                     </div>
                     <a
-                      class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold"
+                      class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold limit-2-lines"
                       href=""
                     >{{this.title}}</a>
-                    <p class="m-0">{{this.description}}</p>
+                    <p class="m-0 limit-2-lines">{{this.description}}</p>
                   </div>
                   <div
                     class="d-flex justify-content-between bg-white border border-top-0 p-4"
@@ -573,7 +579,7 @@
                     <div class="d-flex align-items-center">
                       <img
                         class="rounded-circle mr-2"
-                        src="../../static/img/user.jpg"
+                        src="data:image/jpeg;base64,{{userImg}}"
                         width="25"
                         height="25"
                         alt=""
