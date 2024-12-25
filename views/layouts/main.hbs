@@ -78,10 +78,14 @@
     </li>
     <li class="nav-item">
       <form id="logoutForm" method="POST" style="display: none;">
-  <button type="submit" id="logoutButton">Đăng xuất</button>
-</form>
-
+      <button type="submit" id="logoutButton">Đăng xuất</button>
+    </form>
 <div class="nav-link text-body small cursor-pointer" id="logoutLink">Đăng xuất</div>
+    </li>
+    <li class="nav-item border-right border-secondary">
+      <div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#extendPremiumModal">
+        Gia hạn/Đăng ký tài khoản premium
+      </div>
     </li>
   {{else}}
     <li class="nav-item border-right border-secondary">
@@ -413,6 +417,13 @@
           type="submit"
           class="btn btn-primary"
         >Đăng nhập</button>
+
+
+        <button
+          class="btn btn-primary text-black"
+        >
+        <a href="accountRouter/auth/github">Đăng nhập với github</a>
+        </button>
       </div>
         </form>
       </div>
@@ -665,7 +676,78 @@
   </div>
     </div>
 
+    {{!-- extend register modal --}}
+    <div
+  class="modal fade"
+  id="extendPremiumModal"
+  tabindex="-1"
+  aria-labelledby="extendPremiumModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="extendPremiumModalLabel">Gia hạn tài khoản premium (Tăng thêm 7 ngày)</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          id="extendPremiumForm"
+          method="post"
+          enctype="multipart/form-data"
+        >
+        
+        <div>
+    Bạn có chắc muốn gia hạn tài khoản premium cho tài khoản có id: 
+    <span id="extendPremiumUserId">{{authUser.id}}</span>?
+</div>
+
+
+      <div class="modal-footer">
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >Gia hạn</button></div></div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+    </div>
+
     <script>
+  document
+  .getElementById("extendPremiumForm")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    const userId = document.getElementById("extendPremiumUserId").innerText;
+    const formData = new FormData();
+    formData.append("userId", userId);
+    console.log(userId)
+
+    fetch("/accountRouter/sendExtendPremiumRequest", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert(data.message);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+      
       document
   .getElementById("registerForm")
   .addEventListener("submit", function (e) {
