@@ -2,8 +2,8 @@ import db from "../utils/db.js";
 
 export default {
   getAllUsers() {
-  return db("user").whereNull("deletedAt");
-},
+    return db("user").whereNull("deletedAt");
+  },
 
   add(entity) {
     return db("user").insert(entity);
@@ -17,13 +17,14 @@ export default {
     return db("user").where("id", id).first();
   },
 
-  updateUser(id, username, name, phoneNumber, permission) {
+  updateUser(id, username, name, phoneNumber, permission, premiumExpiryDate) {
     const updatedFields = {};
 
     if (username) updatedFields.username = username;
     if (name) updatedFields.name = name;
     if (phoneNumber) updatedFields.phoneNumber = phoneNumber;
     if (permission) updatedFields.permission = permission;
+    if (permission) updatedFields.premium_expiry_date = premiumExpiryDate;
 
     return db("user")
       .where("id", id)

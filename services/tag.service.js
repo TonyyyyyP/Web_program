@@ -9,15 +9,15 @@ export default {
     return db("tag").where("id", tagId).first();
   },
 
-  addTag(tag) {
-    return db("tag").insert(tag);
+  addTag(name) {
+    return db("Tag").insert({ name: name });
   },
 
-  deleteTag(tagId) {
-    return db("tag").where("id", tagId).del();
+  deleteTag(id) {
+    return db("tag").where("id", id).del();
   },
 
-  updateTag(tagId, updatedTag) {
-    return db("tag").where("id", tagId).update(updatedTag);
+  updateTag(id, name) {
+    return db("Tag").where("id", id).update({name : name});
   },
 };

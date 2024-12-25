@@ -5,19 +5,19 @@ export default {
     return db("category");
   },
 
-  getCategoryById(categoryId) {
-    return db("category").where("id", categoryId).first();
+  getCategoryById(id) {
+    return db("category").where("id", id).first();
   },
 
-  addCategory(category) {
-    return db("category").insert(category);
+  addCategory(Name) {
+    return db("category").insert({ Name: Name });
   },
 
-  deleteCategory(categoryId) {
-    return db("category").where("id", categoryId).del();
+  deleteCategory(id) {
+    return db("category").where("id", id).del();
   },
 
-  updateCategory(categoryId, updatedCategory) {
-    return db("category").where("id", categoryId).update(updatedCategory);
+  updateCategory(id, Name) {
+    return db("category").where("id", id).update({Name : Name});
   },
 };

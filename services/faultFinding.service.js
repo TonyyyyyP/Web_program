@@ -11,33 +11,23 @@ export default {
     return db("faultfinding").insert(faultfinding).returning("*");
   },
 
-getAllFaultfindings() {
-    return db("faultfindings");
+  getAllFaultfindings() {
     return db("faultfinding");
-},
+  },
 
-  getFaultfindingById(faultfindingId) {
-    return db("faultfindings").where("FaultFindingID", faultfindingId).first();
   getFaultfindingById(id) {
     return db("faultfinding").where("id", id).first();
-},
+  },
 
-addFaultfinding(faultfinding) {
-    return db("faultfindings").insert(faultfinding);
+  addFaultfinding(faultfinding) {
     return db("faultfinding").insert(faultfinding);
-},
+  },
 
-  deleteFaultfinding(faultfindingId) {
-    return db("faultfindings").where("FaultFindingID", faultfindingId).del();
   deleteFaultfinding(id) {
     return db("faultfinding").where("id", id).del();
-},
+  },
 
-  updateFaultfinding(faultfindingId, updatedFaultfinding) {
-    return db("faultfindings")
-      .where("FaultFindingID", faultfindingId)
-      .update(updatedFaultfinding);
   updateFaultfinding(id, updatedFaultfinding) {
     return db("faultfinding").where("id", id).update(updatedFaultfinding);
-},
+  },
 };

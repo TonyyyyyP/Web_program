@@ -31,7 +31,8 @@ export default {
         "user.id as userId",
         "user.name as userName",
         "user.username as userUsername",
-        "user.phoneNumber as userPhoneNumber"
+        "user.phoneNumber as userPhoneNumber",
+        "user.img as userimg"
       )
       .where("comment.article_id", articleId);
   },

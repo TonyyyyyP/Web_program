@@ -69,6 +69,7 @@ export default {
       publishedDay: newArticle.publishedDay,
       category_id: newArticle.category_id,
       user_id: newArticle.user_id,
+      premium: newArticle.premium,
     });
 
     return result[0];
@@ -83,26 +84,26 @@ export default {
   },
 
   addTagsToArticle(articleId, tagIds) {
-  try {
-    const tagsToInsert = tagIds.map((tagId) => ({
-      article_id: articleId,
-      tag_id: tagId,
-    }));
+    try {
+      const tagsToInsert = tagIds.map((tagId) => ({
+        article_id: articleId,
+        tag_id: tagId,
+      }));
 
-    if (tagsToInsert.length > 0) {
-      console.log("Chèn các tags:", tagsToInsert);  // Kiểm tra tags sẽ được chèn
-      db("article_tag").insert(tagsToInsert)
-        .then(() => console.log("Tags đã được chèn vào bảng article_tag"))
-        .catch((error) => {
-          console.error("Lỗi khi chèn tags:", error);
-        });
+      if (tagsToInsert.length > 0) {
+        console.log("Chèn các tags:", tagsToInsert); // Kiểm tra tags sẽ được chèn
+        db("article_tag")
+          .insert(tagsToInsert)
+          .then(() => console.log("Tags đã được chèn vào bảng article_tag"))
+          .catch((error) => {
+            console.error("Lỗi khi chèn tags:", error);
+          });
+      }
+    } catch (error) {
+      console.error("Lỗi khi thêm tag vào bài viết:", error);
+      throw new Error("Không thể thêm tag vào bài viết.");
     }
-  } catch (error) {
-    console.error("Lỗi khi thêm tag vào bài viết:", error);
-    throw new Error("Không thể thêm tag vào bài viết.");
-  }
-},
-
+  },
 
   async getTopArticles(limit = 5) {
     const articles = await db("article")
@@ -117,6 +118,7 @@ export default {
         "article.views",
         "user.id as userId",
         "user.name as userName",
+        "user.img as userImg",
         "category.Name as category_name"
       )
       .orderBy("article.views", "desc")
@@ -137,6 +139,7 @@ export default {
         "article.publishedDay",
         "article.views",
         "user.id as userId",
+        "user.img as userImg",
         "user.name as userName",
         "category.Name as category_name"
       )
@@ -159,6 +162,7 @@ export default {
         "article.views",
         "user.id as userId",
         "user.name as userName",
+        "user.img as userImg",
         "category.Name as category_name"
       )
       .orderBy("article.publishedDay", "desc")
@@ -180,6 +184,7 @@ export default {
         "article.views",
         "user.id as userId",
         "user.name as userName",
+        "user.img as userImg",
         "category.Name as category_name"
       )
       .orderBy("article.publishedDay", "desc")
@@ -202,6 +207,7 @@ export default {
         "article.views",
         "user.id as userId",
         "user.name as userName",
+        "user.img as userImg",
         "category.Name as category_name"
       )
       .count("comment.id as comments")
@@ -306,11 +312,11 @@ export default {
       WHERE a.user_id = ?
       ORDER BY a.publishedDay DESC
     `,
-      [user_id] 
+      [user_id]
     );
 
     return {
-      articles: articles[0], 
+      articles: articles[0],
     };
   },
 
@@ -322,6 +328,7 @@ export default {
    a.title,
    a.img,
    a.publishedDay,
+   a.premium,
    c.Name AS categoryName,
    CASE
        WHEN f.description IS NOT NULL AND f.accepted IS NULL THEN 'Từ chối'  -- Khi đã có mô tả và chưa duyệt
@@ -336,9 +343,40 @@ ORDER BY a.publishedDay DESC
     );
 
     return {
-      articles: articles[0], 
+      articles: articles[0],
     };
   },
 
+  async getArticleByKeyword(keyword) {
+    const query = `
+    SELECT a.*, u.username, u.img AS user_img, ff.accepted
+    FROM article a
+    LEFT JOIN faultfinding ff ON a.id = ff.article_id
+    LEFT JOIN user u ON a.user_id = u.id
+    WHERE (LOWER(a.title) LIKE LOWER(CONCAT('%', ?, '%'))
+    OR LOWER(a.description) LIKE LOWER(CONCAT('%', ?, '%'))
+    OR LOWER(a.abstract) LIKE LOWER(CONCAT('%', ?, '%')))
+    AND ff.accepted IS NOT NULL
+    ORDER BY a.publishedDay DESC
+  `;
 
+    const result = await db.raw(query, [keyword, keyword, keyword]);
+
+    return result[0];
+  },
+
+  async addOneViewToArticle(articleId) {
+    try {
+      const result = await db("article")
+        .where("id", articleId)
+        .increment("views", 1);
+      console.log("Số bản ghi được cập nhật:", result);
+      return result; 
+    } catch (error) {
+      console.error("Lỗi khi thêm lượt xem:", error);
+      throw new Error("Không thể cập nhật lượt xem bài báo.");
+    }
+  },
 };
+
+
