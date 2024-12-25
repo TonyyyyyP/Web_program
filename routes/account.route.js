@@ -2,6 +2,9 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import moment from "moment";
 import multer from "multer";
+
+import authController from "../Controller/authController.js"
+
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 10 * 1024 * 1024 },
@@ -10,6 +13,9 @@ const upload = multer({
 import userService from "../services/user.service.js";
 
 const router = express.Router();
+
+
+
 
 router.post("/register", upload.single("image"), async function (req, res) {
   try {
@@ -160,6 +166,37 @@ router.post("/login", upload.none(), async function (req, res) {
 });
 
 
+router.post(
+  "/sendExtendPremiumRequest",
+  upload.none(),
+  async function (req, res) {
+    try {
+      const { userId } = req.body;
+      console.log(userId)
+
+      if (!userId) {
+        return res.status(400).json({
+          message: "userId is required",
+        });
+      }
+      await premium_extension_requestService.addPremium_extension_request(
+        userId
+      );
+
+      res.json({
+        message: "Yêu cầu gia hạn premium đã được gửi thành công",
+      });
+    } catch (error) {
+      console.error("Lỗi khi gửi yêu cầu gia hạn premium:", error);
+      res.status(500).json({
+        message: "Lỗi server khi xử lý yêu cầu",
+      });
+    }
+  }
+);
+
+
+
 
 router.get("/is-available", async function (req, res) {
   const username = req.query.username;
@@ -171,6 +208,7 @@ router.get("/is-available", async function (req, res) {
 });
 
 import { isAuth } from "../middlewares/auth.mdw.js";
+import premium_extension_requestService from "../services/premium_extension_request.service.js";
 
 router.get("/profile", isAuth, function (req, res) {
   res.render("vwAccount/profile", {
@@ -212,8 +250,9 @@ router.post("/update", upload.none(), async function (req, res) {
       const premiumExpiryDate = req.body.premium_expiry_date
         ? new Date(req.body.premium_expiry_date)
         : null;
-
-        console.log(premiumExpiryDate);
+      const managedCategoryId = req.body.managed_category_id
+        ? parseInt(req.body.managed_category_id, 10)
+        : null;
 
       if (!id || !id) {
         return res.status(400).json({ message: "Dữ liệu không hợp lệ!" });
@@ -225,7 +264,8 @@ router.post("/update", upload.none(), async function (req, res) {
         name,
         phoneNumber,
         permission,
-        premiumExpiryDate
+        premiumExpiryDate,
+        managedCategoryId
       );
       if (updated === 0) {
         return res
@@ -253,5 +293,60 @@ router.delete("/delete/:id", async function (req, res) {
       res.status(500).json({ message: "Lỗi server!" });
     }
 });
+
+router.post("/extendPremium/:id", async function (req, res) {
+  try {
+    const requestId = parseInt(req.params.id, 10);
+    if (!requestId) {
+      return res.status(400).json({ message: "ID yêu cầu không hợp lệ!" });
+    }
+
+    const premiumRequest =
+      await premium_extension_requestService.getPremium_extension_requestById(
+        requestId
+      );
+
+    if (!premiumRequest) {
+      return res
+        .status(404)
+        .json({ message: "Yêu cầu gia hạn không tồn tại!" });
+    }
+
+    const userId = premiumRequest.user_id;
+    const user = await userService.getUserById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "Người dùng không tồn tại!" });
+    }
+    const now = new Date();
+    let newExpiryDate;
+    if (!user.premium_expiry_date || new Date(user.premium_expiry_date) < now) {
+      newExpiryDate = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); 
+    } else {
+      newExpiryDate = new Date(
+        new Date(user.premium_expiry_date).getTime() + 7 * 24 * 60 * 60 * 1000
+      ); 
+    }
+
+    await userService.updateUser(userId, null, null, null, null, newExpiryDate);
+    await premium_extension_requestService.deletePremium_extension_request(
+      requestId
+    );
+
+    res.status(200).json({
+      message: "Gia hạn premium thành công!",
+      newExpiryDate,
+    });
+  } catch (error) {
+    console.error("Lỗi khi gia hạn premium:", error);
+    res.status(500).json({ message: "Lỗi server!" });
+  }
+});
+
+router.get("/auth/github", authController.githubLogin);
+router.get("/auth/github/callback", authController.githubCallback);
+
+
+
 
 export default router;

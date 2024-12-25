@@ -22,9 +22,7 @@ articleRouter.post("/addArticle", upload.single("image"), async (req, res) => {
     const { title, description, category_id, tags, userId, premium, abstract } =
       req.body;
     const image = req.file ? req.file.buffer.toString("base64") : null;
-
-    console.log(tags);
-
+    console.log(abstract)
     const tagIds = tags ? JSON.parse(tags) : [];
     const newArticle = {
       title,
