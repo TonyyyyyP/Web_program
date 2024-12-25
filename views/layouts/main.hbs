@@ -69,8 +69,6 @@
           <nav class="navbar navbar-expand-sm bg-dark p-0">
             <ul class="navbar-nav ml-n2">
               <li class="nav-item border-right border-secondary">
-                <a class="nav-link text-body small" href="#">Monday, January 1,
-                  2045</a>
               </li>
               {{#if isLoggedIn}}
     <li class="nav-item">
@@ -94,6 +92,12 @@
     <li class="nav-item">
       <div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#loginModal">
         Đăng nhập
+      </div>
+    </li>
+
+    <li class="nav-item border-right border-secondary">
+      <div class="nav-link text-body small cursor-pointer" data-bs-toggle="modal" data-bs-target="#premiumRegisterModal">
+        Đăng ký tài khoản premium
       </div>
     </li>
   {{/if}}
@@ -183,24 +187,25 @@
               </div>
             </div>
           </div>
-          <div
-            data-aos="fade-left"
-            class="input-group ml-auto d-none d-lg-flex"
-            style="width: 100%; max-width: 300px"
-          >
-            <input
-              type="text"
-              class="form-control border-0"
-              placeholder="Từ khóa"
-            />
-            <div class="input-group-append">
-              <button
-                class="input-group-text bg-primary text-dark border-0 px-3"
-              >
-                <i class="fa fa-search"></i>
-              </button>
-            </div>
-          </div>
+          <form
+  data-aos="fade-left"
+  class="input-group ml-auto d-none d-lg-flex"
+  style="width: 100%; max-width: 300px"
+  action="/timkiem" method="get"
+>
+  <input
+    type="text"
+    class="form-control border-0"
+    placeholder="Từ khóa"
+    name="keyword" 
+  />
+  <div class="input-group-append">
+    <button type="submit" class="input-group-text bg-primary text-dark border-0 px-3">
+      <i class="fa fa-search"></i>
+    </button>
+  </div>
+</form>
+
           {{#if isLoggedIn}}
         <div class="nav-item dropdown">
               <a
@@ -218,7 +223,7 @@
   <a href="/quantrivien/quanlydanhmuc" class="dropdown-item">Quản trị trang</a>
 {{/if}}
 
-{{#if (eq authUser.permission "editor")}}
+{{#if (or (eq authUser.permission "editor") (eq authUser.permission "admin"))}}
   <a href="/bientap" class="dropdown-item">Biên tập</a>
 {{/if}}
 
@@ -441,6 +446,20 @@
           method="post"
           enctype="multipart/form-data"
         >
+        <div class="form-group mb-3">
+            <label
+              for="userImage"
+              class="form-label font-weight-bold text-black"
+              >Ảnh người dùng</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="userImage"
+              name="userImage"
+              accept="image/*"
+            />
+          </div>
           <div class="form-group mb-3">
             <label
               for="usernameRegister"
@@ -524,25 +543,147 @@
   </div>
     </div>
 
+    {{!-- Premium register modal --}}
+    <div
+  class="modal fade"
+  id="premiumRegisterModal"
+  tabindex="-1"
+  aria-labelledby="premiumRegisterModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="premiumRegisterModalLabel">Đăng ký tài khoản premium (có hiệu lực 7 ngày kể từ khi đăng ký)</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form
+          id="premiumRegisterForm"
+          method="post"
+          enctype="multipart/form-data"
+        >
+        <div class="form-group mb-3">
+            <label
+              for="premiumUserImage"
+              class="form-label font-weight-bold text-black"
+              >Ảnh người dùng</label
+            >
+            <input
+              type="file"
+              class="form-control"
+              id="premiumUserImage"
+              name="premiumUserImage"
+              accept="image/*"
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label
+              for="premiumUsernameRegister"
+              class="form-label font-weight-bold text-black"
+            >Tên đăng nhập</label>
+            <input
+              type="text"
+              class="form-control"
+              id="premiumUsernameRegister"
+              name="premiumUsernameRegister"
+              placeholder="Nhập tên đăng nhập"
+              required
+          />
+          </div>
+          <div class="form-group mb-3">
+            <label
+              for="premiumPasswordRegister"
+              class="form-label font-weight-bold text-black"
+            >Mật khẩu</label>
+            <input
+              type="password"
+              class="form-control"
+              id="premiumPasswordRegister"
+              name="premiumPasswordRegister"
+              placeholder="Nhập tên mật khẩu"
+              required
+            />
+          </div>
+           <div class="form-group mb-3">
+            <label
+              for="premiumPhoneNumber"
+              class="form-label font-weight-bold text-black"
+            >Số điện thoại</label>
+            <input
+              type="text"
+              class="form-control"
+              id="premiumPhoneNumber"
+              name="premiumPhoneNumber"
+              placeholder="Nhập số điện thoại"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label
+              for="premiumName"
+              class="form-label font-weight-bold text-black"
+            >Tên người dùng</label>
+            <input
+              type="text"
+              class="form-control"
+              id="premiumName"
+              name="premiumName"
+              placeholder="Nhập tên người dùng"
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <label
+              for="premiumDob"
+              class="form-label font-weight-bold text-black"
+            >Ngày sinh</label>
+            <input
+  type="date"
+  class="form-control"
+  id="premiumDob"
+  name="premiumDob"
+  placeholder="Nhập ngày sinh"
+  required
+/>
+
+          </div>
+          <div class="modal-footer">
+        <button
+          type="submit"
+          class="btn btn-primary"
+        >Đăng ký</button></div>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+    </div>
+
     <script>
       document
   .getElementById("registerForm")
   .addEventListener("submit", function (e) {
     e.preventDefault();
-    const username = document.getElementById("loginForm").value;
+    const username = document.getElementById("usernameLogin").value;
     const password = document.getElementById("passwordRegister").value;
     const phoneNumber = document.getElementById("phoneNumber").value;
     const name = document.getElementById("name").value;
     const dob = document.getElementById("dob").value;
     const formData = new FormData();
+    const userImage = document.getElementById("userImage").files[0];
     formData.append("username", username);
     formData.append("password", password);
     formData.append("phoneNumber", phoneNumber);
     formData.append("name", name);
     formData.append("dob", dob);
-
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
+    if (userImage) {
+    formData.append("image", userImage);
     }
 
     fetch("/accountRouter/register", {
@@ -562,6 +703,49 @@
         console.error("Error:", error);
       });
   });
+
+document
+  .getElementById("premiumRegisterForm")
+  .addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = document.getElementById("premiumUsernameRegister").value;
+    const password = document.getElementById("premiumPasswordRegister").value;
+    const phoneNumber = document.getElementById("premiumPhoneNumber").value;
+    const name = document.getElementById("premiumName").value;
+    const dob = document.getElementById("premiumDob").value;
+    const formData = new FormData();
+    const userImage = document.getElementById("premiumUserImage").files[0];
+    formData.append("username", username);
+    formData.append("password", password);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("name", name);
+    formData.append("dob", dob);
+    if (userImage) {
+    formData.append("image", userImage);
+    }
+
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+    fetch("/accountRouter/premiumRegister", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        alert(data.message);
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  });
+
 
     document
   .getElementById("loginForm")
