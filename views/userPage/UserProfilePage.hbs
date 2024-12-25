@@ -31,7 +31,7 @@
                 <button class="btn btn-primary changeBtn">Thay đổi</button>
               </div>
               <img
-                src="./img/news-700x435-4.jpg"
+                src="{{{authUser.img}}}"
                 alt="Profile Picture"
                 class="userProfilePic"
               />
@@ -48,26 +48,26 @@
                 readonly
                 class="form-control-plaintext"
                 id="staticEmail"
-                value="Người dùng"
+                value="{{authUser.permission}}"
               />
             </div>
           </div>
           <div class="mb-3">
-            <label for="email" class="form-label text-black">Email:</label>
+            <label for="username" class="form-label text-black">Tên đăng nhập:</label>
             <input
-              type="email"
+              type="username"
               class="form-control"
-              id="email"
-              placeholder="name@example.com"
+              id="username"
+              placeholder="{{authUser.username}}"
             />
           </div>
           <div class="mb-3">
-            <label for="name" class="form-label text-black">Tên:</label>
+            <label for="name" class="form-label text-black">Tên người dùng:</label>
             <input
               type="email"
               class="form-control"
               id="name"
-              placeholder="Tên người dùng"
+              placeholder="{{authUser.name}}"
             />
           </div>
           <div class="mb-3">
@@ -78,7 +78,7 @@
               type="text"
               class="form-control"
               id="phone"
-              placeholder="0359256696"
+              placeholder="{{authUser.phoneNumber}}"
             />
           </div>
           <!-- save button -->

@@ -55,6 +55,22 @@
             />
           </div>
 
+          <div class="form-group mb-3">
+            <label
+              for="abstract"
+              class="form-label font-weight-bold text-black"
+              >Tóm tắt bài viết</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="abstract"
+              name="abstract"
+              placeholder="Nhập tóm tắt bài viết"
+              required
+            />
+          </div>
+
           <!-- Cateogry -->
           <div class="form-group mb-3">
             <label for="category" class="form-label font-weight-bold text-black"
@@ -67,6 +83,9 @@
   aria-label="Default select example"
   required
 >
+
+
+
   <option selected disabled>Chọn danh mục của bài viết</option>
   {{#each categories}}
   <option value="{{this.id}}">{{this.Name}}</option>
@@ -99,6 +118,17 @@
             ></div>
           </div>
           <input type="hidden" id="userId" value="{{authUser.id}}"/>
+          <!-- Checkbox Premium -->
+<div class="form-group mb-3">
+  <label for="premium" class="form-label font-weight-bold text-black">Bài viết Premium</label>
+  <input
+    type="checkbox"
+    class="form-check-input"
+    id="premium"
+    name="premium"
+  />
+  <small class="form-text text-muted">Đánh dấu nếu bài viết này là Premium.</small>
+</div>
           <!-- Submit Button -->
           <div class="d-flex justify-content-end">
             <button type="submit" class="btn btn-primary font-weight-bold px-4">
@@ -146,6 +176,7 @@ document.getElementById("addArticleByUserForm").addEventListener("submit", funct
   const description = quillContent ? quillContent.querySelector(".ql-editor").innerHTML : "";
   const categoryId = document.getElementById("category_id").value;
   const userId = document.getElementById("userId").value;
+  const abstract = document.getElementById("abstract").value;
 
   const tagIds = [];
   document
@@ -155,12 +186,15 @@ document.getElementById("addArticleByUserForm").addEventListener("submit", funct
     });
 
   const articleImage = document.getElementById("articleImage").files[0];
+  const isPremium = document.getElementById("premium").checked; 
   const formData = new FormData();
   formData.append("title", title);
   formData.append("description", description); 
   formData.append("category_id", categoryId);
   formData.append("tags", JSON.stringify(tagIds));
   formData.append("userId", userId);
+  formData.append("premium", isPremium);
+  formData.append("abstract", abstract);
 
   if (articleImage) {
     formData.append("image", articleImage);
