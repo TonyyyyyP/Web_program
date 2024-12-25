@@ -1,6 +1,8 @@
 import express from "express";
-import categoryService from "../old_folder/old_services/category.service.js";
+import categoryService from "../services/category.service.js";
 
+import multer from "multer";
+const upload = multer();
 const router = express.Router();
 
 router.get("/", async function (req, res) {
@@ -10,44 +12,64 @@ router.get("/", async function (req, res) {
   });
 });
 
-router.get("/add", async function (req, res) {
-  res.render("Category/add");
+router.post("/addCategory", upload.none(), async function (req, res) {
+  try {
+    const { Name } = req.body;
+    console.log(Name);
+    await categoryService.addCategory(Name);
+    res.status(201).json({ message: "Danh mục đã được thêm thành công!" });
+  } catch (error) {
+    console.error("Error details:", error);
+    res.status(500).json({ message: "Lỗi khi thêm danh mục.", error });
+  }
 });
 
-router.post("/add", async function (req, res) {
-  const newCategory = {
-    CatName: req.body.CatName,
-  };
-  const result = await categoryService.addCategory(newCategory);
-  console.log(result);
-  res.render("Category/add");
+router.delete("/delete/:id", async function (req, res) {
+  try {
+      const id = parseInt(req.params.id, 10); 
+      if (!id) {
+        return res.status(400).json({ message: "ID không hợp lệ!" });
+      }
+      await categoryService.deleteCategory(id);
+      res.status(200).json({ message: "Xóa danh mục thành công!" });
+    } catch (error) {
+      console.error("Lỗi khi xóa tag:", error);
+      res.status(500).json({ message: "Lỗi server!" });
+    }
 });
 
-router.get("/edit", async function (req, res) {
-  const categoryId = parseInt(req.query.id) || 0;
-  const category = await categoryService.getCategoryById(categoryId);
-  if (!category) {
-    return res.redirect("/admin/categories");
+router.post("/update", upload.none(), async function (req, res) {
+  try {
+  const id = parseInt(req.body.id, 10);
+  const Name = req.body.Name;
+
+  if (!id || !id) {
+    return res.status(400).json({ message: "Dữ liệu không hợp lệ!" });
   }
 
-  res.render("Category/edit", {
-    category,
-  });
+  const updated = await categoryService.updateCategory(id, Name);
+      if (updated === 0) {
+        return res
+          .status(404)
+          .json({ message: "Danh mục không tồn tại hoặc không được cập nhật!" });
+      }
+  
+      res.status(200).json({ message: "Cập nhật danh mục thành công!" });
+    } catch (error) {
+      console.error("Lỗi khi cập nhật tag:", error);
+      res.status(500).json({ message: "Lỗi server khi cập nhật danh mục." });
+    }
 });
 
-router.post("/delete", async function (req, res) {
-  const categoryId = parseInt(req.body.CatID);
-  await categoryService.deleteCategory(categoryId);
-  res.redirect("/admin/categories");
-});
-
-router.post("/update", async function (req, res) {
-  const categoryId = parseInt(req.body.CatID);
-  const updatedCategory = {
-    CatName: req.body.CatName,
-  };
-  await categoryService.updateCategory(categoryId, updatedCategory);
-  res.redirect("/admin/categories");
+router.get("/:id", async function (req, res) {
+  try {
+    const { id } = req.params;
+    const category = await categoryService.getCategoryById(id);
+    res.json(category);
+  } catch (error) {
+    console.error("Lỗi khi lấy bài viết:", error);
+    res.status(500).json({ message: "Lỗi server" });
+  }
 });
 
 export default router;

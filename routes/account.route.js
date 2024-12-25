@@ -2,19 +2,19 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import moment from "moment";
 import multer from "multer";
-const upload = multer();
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 },
+});
 
 import userService from "../services/user.service.js";
 
 const router = express.Router();
 
-router.get("/register", function (req, res) {
-  res.render("vwAccount/register");
-});
-
-router.post("/register", upload.none(), async function (req, res) {
+router.post("/register", upload.single("image"), async function (req, res) {
   try {
     const { username, password, phoneNumber, name, dob } = req.body;
+    const image = req.file ? req.file.buffer.toString("base64") : null;
 
     if (
       !username?.trim() ||
@@ -40,10 +40,10 @@ router.post("/register", upload.none(), async function (req, res) {
       name: name,
       phoneNumber: phoneNumber,
       dob: formatted_dob,
-      permission: "user",
+      permission: "guest",
       deletedAt: null,
+      img: image,
     };
-    console.log(newUser)
     const result = await userService.add(newUser);
 
     if (result) {
@@ -57,33 +57,108 @@ router.post("/register", upload.none(), async function (req, res) {
   }
 });
 
-router.get("/login", function (req, res) {
-  res.render("vwAccount/login");
-});
+router.post(
+  "/premiumRegister",
+  upload.single("image"),
+  async function (req, res) {
+    try {
+      const { username, password, phoneNumber, name, dob } = req.body;
+      const image = req.file ? req.file.buffer.toString("base64") : null;
+
+      if (
+        !username?.trim() ||
+        !password?.trim() ||
+        !phoneNumber?.trim() ||
+        !name?.trim() ||
+        !dob?.trim()
+      ) {
+        return res.status(400).json({ message: "Dữ liệu không hợp lệ!" });
+      }
+      const hash_password = bcrypt.hashSync(password, 8);
+      const formatted_dob = moment(dob, "YYYY-MM-DD", true).isValid()
+        ? moment(dob).format("YYYY-MM-DD")
+        : null;
+
+      if (!formatted_dob) {
+        return res.status(400).json({ message: "Ngày sinh không hợp lệ!" });
+      }
+
+      const premiumExpiryDate = moment()
+        .add(7, "days")
+        .format("YYYY-MM-DD HH:mm:ss");
+
+      const newUser = {
+        username: username,
+        password: hash_password,
+        name: name,
+        phoneNumber: phoneNumber,
+        dob: formatted_dob,
+        permission: "guest",
+        deletedAt: null,
+        img: image,
+        premium_expiry_date: premiumExpiryDate,
+      };
+
+      console.log(newUser);
+      const result = await userService.add(newUser);
+
+      if (result) {
+        res.status(201).json({ message: "Đăng ký thành công!" });
+      } else {
+        res.status(500).json({ message: "Không thể tạo người dùng!" });
+      }
+    } catch (error) {
+      console.error("Lỗi khi đăng ký người dùng:", error);
+      res.status(500).json({ message: "Lỗi server khi đăng ký người dùng." });
+    }
+  }
+);
 
 router.post("/login", upload.none(), async function (req, res) {
-  const user = await userService.findByUsername(req.body.username);
-  if (!user) {
-    return res.status(400).json({
-      message: "Không tìm thấy tên đăng nhập",
+  try {
+    const user = await userService.findByUsername(req.body.username);
+    if (!user) {
+      return res.status(400).json({
+        message: "Không tìm thấy tên đăng nhập",
+      });
+    }
+
+    if (!bcrypt.compareSync(req.body.password, user.password)) {
+      return res.status(400).json({
+        message: "Mật khẩu sai",
+      });
+    }
+
+    const imgBase64 = user.img
+      ? `data:image/png;base64,${Buffer.from(user.img).toString("base64")}`
+      : null;
+
+    req.session.auth = true;
+    req.session.authUser = {
+      id: user.id,
+      username: user.username,
+      name: user.name,
+      phoneNumber: user.phoneNumber,
+      dob: user.dob,
+      permission: user.permission,
+      img: imgBase64, 
+    };
+
+    const retUrl = req.session.retUrl || "/";
+    req.session.retUrl = null;
+
+    res.json({
+      message: "Đăng nhập thành công",
+      redirectUrl: retUrl,
+    });
+  } catch (error) {
+    console.error("Lỗi đăng nhập:", error);
+    res.status(500).json({
+      message: "Lỗi server khi đăng nhập",
     });
   }
-  if (!bcrypt.compareSync(req.body.password, user.password)) {
-    return res.status(400).json({
-      message: "Mật khẩu sai",
-    });
-  }
-
-  req.session.auth = true;
-  req.session.authUser = user;
-
-  const retUrl = req.session.retUrl || "/";
-  req.session.retUrl = null;
-  res.json({
-    message: "Đăng nhập thành công",
-    redirectUrl: retUrl,
-  });
 });
+
 
 
 router.get("/is-available", async function (req, res) {
@@ -134,12 +209,24 @@ router.post("/update", upload.none(), async function (req, res) {
       const name = req.body.name;
       const phoneNumber = req.body.phoneNumber;
       const permission = req.body.permission;
-  
+      const premiumExpiryDate = req.body.premium_expiry_date
+        ? new Date(req.body.premium_expiry_date)
+        : null;
+
+        console.log(premiumExpiryDate);
+
       if (!id || !id) {
         return res.status(400).json({ message: "Dữ liệu không hợp lệ!" });
       }
   
-      const updated = await userService.updateUser(id, username, name, phoneNumber, permission);
+      const updated = await userService.updateUser(
+        id,
+        username,
+        name,
+        phoneNumber,
+        permission,
+        premiumExpiryDate
+      );
       if (updated === 0) {
         return res
           .status(404)
