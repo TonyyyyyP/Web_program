@@ -39,7 +39,7 @@
                 {{/if}}
             </td>
             <td class="action-buttons">
-                <button class="btn btn-sm btn-primary" onclick="readArticle('{{this.articleId}}')">Xem</button>
+                <a href="/baibao/{{this.articleId}}"><button class="btn btn-sm btn-primary" onclick="readArticle('{{this.articleId}}')">Xem</button></a>
                 <button class="btn btn-sm btn-danger" data-bs-toggle="modal" 
                     data-bs-target="#rejectArticleModal" onclick="rejectArticle('{{this.articleId}}')">Từ chối</button>
                 
